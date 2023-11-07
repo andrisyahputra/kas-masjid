@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MasjidController;
+use App\Http\Controllers\UserProfileController;
 use App\Http\Middleware\EnsureDataMasjidCompleted;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('masjid', MasjidController::class);
 
     Route::middleware(EnsureDataMasjidCompleted::class)->group(function () {
+        Route::resource('userprofile', UserProfileController::class);
         Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     });
 });
