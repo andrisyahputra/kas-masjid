@@ -19,25 +19,25 @@
 
                     <div class="mb-3 form-group">
                         <label for="nama" class="form-label">Nama Masjid</label>
-                        {!! Form::text('nama', null, ['class' => 'form-control']) !!}
+                        {!! Form::text('nama', null, ['class' => 'form-control', 'placeholder' => 'Masukkan Nama']) !!}
                         <span class="text-danger">{!! $errors->first('nama') !!}</span>
                     </div>
 
                     <div class="mb-3 form-group">
                         <label for="alamat" class="form-label">Alamat Masjid</label>
-                        {!! Form::text('alamat', null, ['class' => 'form-control']) !!}
+                        {!! Form::text('alamat', null, ['class' => 'form-control', 'placeholder' => 'Masukkan Alamat']) !!}
                         <span class="text-danger">{!! $errors->first('alamat') !!}</span>
                     </div>
 
                     <div class="mb-3 form-group">
                         <label for="telp" class="form-label">No Wa/No Telp Masjid</label>
-                        {!! Form::tel('telp', null, ['class' => 'form-control']) !!}
+                        {!! Form::tel('telp', null, ['class' => 'form-control', 'placeholder' => 'Masukkan nomor telepon/WA']) !!}
                         <span class="text-danger">{!! $errors->first('telp') !!}</span>
                     </div>
 
                     <div class="mb-3 form-group">
                         <label for="email" class="form-label">Email Masjid</label>
-                        {!! Form::text('email', null, ['class' => 'form-control']) !!}
+                        {!! Form::email('email', null, ['class' => 'form-control', 'placeholder' => 'Masukkan Email']) !!}
                         <span class="text-danger">{!! $errors->first('email') !!}</span>
                     </div>
 

@@ -6,6 +6,7 @@ use App\Models\Masjid;
 use App\Http\Requests\StoreMasjidRequest;
 use App\Http\Requests\UpdateMasjidRequest;
 use Illuminate\Http\Request;
+use Laracasts\Flash\Flash;
 
 class MasjidController extends Controller
 {
@@ -53,6 +54,7 @@ class MasjidController extends Controller
         $user = auth()->user();
         $user->masjid_id = $masjid->id;
         $user->save();
+        Flash('Data Berhasil Disimpan')->success();
 
         return back();
     }
