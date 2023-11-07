@@ -22,6 +22,7 @@
                                 <th>Jenis</th>
                                 <th>Jumlah</th>
                                 <th>Saldo Akhir</th>
+                                <th>Diinput Oleh</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -29,12 +30,13 @@
                             @foreach ($kasList as $kas)
                                 <tr>
                                     <td>{{ $kas->id }}</td>
-                                    <td>{{ $kas->tanggal }}</td>
-                                    <td>{{ $kas->kategori }}</td>
+                                    <td>{{ $kas->tanggal->translatedFormat('d-m-Y') }}</td>
+                                    <td>{{ $kas->kategori ?? 'Umum' }}</td>
                                     <td>{{ $kas->keterangan }}</td>
                                     <td>{{ $kas->jenis }}</td>
                                     <td>{{ format_rupiah($kas->jumlah, true) }}</td>
                                     <td>{{ format_rupiah($kas->saldo_akhir, true) }}</td>
+                                    <td>{{ $kas->createdBy->name }}</td>
                                     <td>
                                         <a href="{{ route('kas.edit', $kas->id) }}" class="btn btn-primary btn-sm">Edit</a>
                                         <form action="{{ route('kas.destroy', $kas->id) }}" method="POST"

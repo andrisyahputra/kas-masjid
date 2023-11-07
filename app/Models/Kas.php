@@ -8,6 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 class Kas extends Model
 {
     use HasFactory;
-    protected $table = "kas";
-    protected $guarded = ['id'];
+    // protected $table = "kas";
+    protected $fillable = [
+        'masjid_id', 'tanggal', 'kategori', 'keterangan', 'jenis', 'jumlah', 'saldo_akhir', 'created_by'
+    ];
+
+    protected $casts = [
+        'tanggal' => 'datetime:d-m-Y'
+    ];
+
+    public function masjid()
+    {
+        return $this->belongsTo(Masjid::class);
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }
