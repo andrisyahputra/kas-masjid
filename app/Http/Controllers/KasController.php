@@ -20,8 +20,8 @@ class KasController extends Controller
     public function create()
     {
         $kas = new Kas;
-
-        return view('kas_form', compact('kas'));
+        $saldoAkhir = Kas::saldoAkhir();
+        return view('kas_form', compact('kas', 'saldoAkhir'));
     }
 
 
@@ -37,24 +37,19 @@ class KasController extends Controller
             'jumlah' => 'required|numeric',
         ]);
 
-        $kas = Kas::where('masjid_id', auth()->user()->masjid_id)
-            ->orderBy('tanggal', 'desc')
-            ->first();
+        $saldoAwal = Kas::saldoAkhir();
+        $saldoAkhir = $saldoAwal;
+        // @dd($saldoAkhir);
 
-        $saldoAkhir = 0;
-        if ($kas != null) {
-            // merukapan saldo terakhir di tambah saldo masuk/keluar
-            if ($requestData['jenis'] == 'masuk') {
-                $saldoAkhir = $kas->saldo_akhir + $requestData['jumlah'];
-            } else {
-                $saldoAkhir = $kas->saldo_akhir - $requestData['jumlah'];
-            }
+        if ($requestData['jenis'] == 'masuk') {
+            $saldoAkhir += $requestData['jumlah'];
         } else {
-            // merupakan saldo pertama
-            $saldoAkhir = $requestData['jumlah'];
+            $saldoAkhir -= $requestData['jumlah'];
         }
+
+
         if ($saldoAkhir <= -1) {
-            Flash('Data Kas gagal DiKeluarkan. Saldo Akhir tidak boleh kurang dari 0. saldo terakhir adalah ' . $kas->saldo_akhir)->error();
+            Flash('Data Kas gagal DiKeluarkan <b>' . format_rupiah($requestData['jumlah'], true) . '</b>. Saldo Akhir tidak boleh kurang dari 0. saldo terakhir sisa <b>' . format_rupiah($saldoAwal, true) . '</b>')->error();
             return back();
         }
 

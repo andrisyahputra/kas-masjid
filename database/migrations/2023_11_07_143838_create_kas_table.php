@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('masjid_id');
             $table->dateTime('tanggal');
-            $table->string('kategori');
+            $table->string('kategori')->nullable();
             $table->text('keterangan');
             $table->enum('jenis', ['masuk', 'keluar']);
             $table->bigInteger('jumlah');

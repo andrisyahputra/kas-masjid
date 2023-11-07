@@ -1,6 +1,12 @@
 @extends('layouts.app_adminkit') <!-- Sesuaikan dengan layout Anda -->
 
 @section('content')
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     <h1 class="h3 mb-3">Kas Masjid</h1>
 
 

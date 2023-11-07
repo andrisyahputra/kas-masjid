@@ -5,8 +5,9 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="card">
-                    <div class="card-header">Tambah Data Kas</div>
+                    <div class="card-header">Form Transaksi Kas</div>
                     <div class="card-body">
+                        <h4>Saldo Akhir Tersisa Saat ini : {{ format_rupiah($saldoAkhir, true) }}</h4>
                         {!! Form::model($kas, [
                             'route' => isset($kas->id) ? ['kas.update', $kas->id] : 'kas.store',
                             'method' => isset($kas->id) ? 'PUT' : 'POST',
@@ -34,17 +35,17 @@
                             {!! Form::label('jenis', 'Jenis', ['class' => 'form-label']) !!}
                             <div class="form-check">
                                 {!! Form::radio('jenis', 'masuk', true, ['class' => 'form-check-input', 'id' => 'jenisMasuk']) !!}
-                                {!! Form::label('jenisMasuk', 'Masuk', ['class' => 'form-check-label']) !!}
+                                {!! Form::label('jenisMasuk', 'Pemasukkan', ['class' => 'form-check-label']) !!}
                             </div>
                             <div class="form-check">
                                 {!! Form::radio('jenis', 'keluar', false, ['class' => 'form-check-input', 'id' => 'jenisKeluar']) !!}
-                                {!! Form::label('jenisKeluar', 'Keluar', ['class' => 'form-check-label']) !!}
+                                {!! Form::label('jenisKeluar', 'Pengeluaran', ['class' => 'form-check-label']) !!}
                             </div>
                             <span class="text-danger">{{ $errors->first('jenis') }}</span>
                         </div>
                         <div class="mb-3 form-group">
-                            {!! Form::label('jumlah', 'Jumlah', ['class' => 'form-label']) !!}
-                            {!! Form::number('jumlah', null, ['class' => 'form-control', 'placeholder' => 'Masukkan Jumlah']) !!}
+                            {!! Form::label('jumlah', 'Jumlah Tranksaksi', ['class' => 'form-label']) !!}
+                            {!! Form::number('jumlah', null, ['class' => 'form-control', 'placeholder' => 'Masukkan Nominal']) !!}
                             <span class="text-danger">{{ $errors->first('jumlah') }}</span>
                         </div>
 

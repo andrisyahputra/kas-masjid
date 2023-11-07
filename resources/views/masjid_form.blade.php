@@ -19,7 +19,11 @@
 
                     <div class="mb-3 form-group">
                         <label for="nama" class="form-label">Nama Masjid</label>
-                        {!! Form::text('nama', null, ['class' => 'form-control', 'placeholder' => 'Masukkan Nama']) !!}
+                        <div class="input-group">
+                            <span class="input-group-text">Masjid</span>
+                            {!! Form::text('nama', null, ['class' => 'form-control', 'placeholder' => 'Masukkan Nama']) !!}
+                        </div>
+
                         <span class="text-danger">{!! $errors->first('nama') !!}</span>
                     </div>
 
