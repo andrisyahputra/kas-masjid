@@ -10,6 +10,10 @@
                     <h5 class="card-title mb-0">Selamat Datang {{ auth()->user()->name }}</h5>
                 </div>
                 <div class="card-body">
+                    <div class="alert alert-primary" role="alert">
+                        <strong>Alert Heading</strong> Some Word
+                    </div>
+
                 </div>
             </div>
         </div>
