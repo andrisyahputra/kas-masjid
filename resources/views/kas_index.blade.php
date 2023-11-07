@@ -33,8 +33,8 @@
                                     <td>{{ $kas->kategori }}</td>
                                     <td>{{ $kas->keterangan }}</td>
                                     <td>{{ $kas->jenis }}</td>
-                                    <td>{{ $kas->jumlah }}</td>
-                                    <td>{{ $kas->saldo_akhir }}</td>
+                                    <td>{{ format_rupiah($kas->jumlah, true) }}</td>
+                                    <td>{{ format_rupiah($kas->saldo_akhir, true) }}</td>
                                     <td>
                                         <a href="{{ route('kas.edit', $kas->id) }}" class="btn btn-primary btn-sm">Edit</a>
                                         <form action="{{ route('kas.destroy', $kas->id) }}" method="POST"
