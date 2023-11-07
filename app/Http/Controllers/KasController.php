@@ -5,62 +5,95 @@ namespace App\Http\Controllers;
 use App\Models\Kas;
 use App\Http\Requests\StoreKasRequest;
 use App\Http\Requests\UpdateKasRequest;
+use Illuminate\Http\Request;
 
 class KasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // ...
     public function index()
     {
-        //
+        $kasList = Kas::all();
+        return view('kas_index', compact('kasList'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $data = new Kas;
+        return view('kas_form', compact('data'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreKasRequest $request)
+
+
+    public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'masjid_id' => 'required',
+            'tanggal' => 'required|date',
+            'kategori' => 'nullable',
+            'keterangan' => 'required',
+            'jenis' => 'required|in:masuk,keluar',
+            'jumlah' => 'required|numeric',
+            'created_by' => 'require',
+        ]);
+
+
+        $kas = Kas::create($request->all());
+        $kas->saldo_akhir = $this->calculateSaldoAkhir($kas->tanggal);
+        $kas->save();
+        return redirect()->route('kas.index')->with('success', 'Data KAS Berhasil Di Tambah');
+    }
+    public function edit($id)
+    {
+        $data = Kas::findOrFail($id);
+
+        return view('kas.edit', compact('data'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Kas $kas)
+    public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'masjid_id' => 'required',
+            'tanggal' => 'required|date',
+            'kategori' => 'nullable',
+            'keterangan' => 'required',
+            'jenis' => 'required|in:masuk,keluar',
+            'jumlah' => 'required|numeric',
+            'created_by' => 'require',
+        ]);
+
+
+        $kas = Kas::findOrFail($id);
+        $kas->update($request->all());
+        $kas->saldo_akhir = $this->calculateSaldoAkhir($kas->tanggal);
+        $kas->save();
+        return redirect()->route('kas.index')->with('success', 'Data KAS Berhasil Di Update');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Kas $kas)
+    public function destroy($id)
     {
-        //
+        Kas::findOrFail($id)->delete();
+        $this->hitungSaldoAkhir(); // Panggil method hitungSaldoAkhir setelah menghapus data
+        return redirect()->route('kas.index')->with('success', 'Data KAS Berhasil Dihapus');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateKasRequest $request, Kas $kas)
+    private function calculateSaldoAkhir($tanggal)
     {
-        //
-    }
+        $transactions = Kas::where('tanggal', '<=', $tanggal)
+            ->orderBy('tanggal')
+            ->orderBy('id')
+            ->get();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Kas $kas)
-    {
-        //
+        $saldo = 0;
+
+        foreach ($transactions as $transaction) {
+            if ($transaction->jenis == 'masuk') {
+                $saldo += $transaction->jumlah;
+            } else {
+                $saldo -= $transaction->jumlah;
+            }
+        }
+
+        return $saldo;
     }
 }
