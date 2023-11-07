@@ -49,6 +49,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    {{ $kasList->links() }}
                 </div>
             </div>
         </div>
