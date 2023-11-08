@@ -65,6 +65,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <h2>Saldo Terakhir adalah Rp. {{ format_rupiah($saldoAkhir) }} </h2>
                     {{ $kasList->links() }}
                 </div>
             </div>
