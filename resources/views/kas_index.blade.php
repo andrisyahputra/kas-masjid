@@ -49,13 +49,17 @@
                                     <td>{{ $kas->createdBy->name }}</td>
                                     <td>
                                         <a href="{{ route('kas.edit', $kas->id) }}" class="btn btn-primary btn-sm">Edit</a>
-                                        <form action="{{ route('kas.destroy', $kas->id) }}" method="POST"
-                                            style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm"
-                                                onclick="return confirm('Apakah Anda yakin?')">Hapus</button>
-                                        </form>
+
+                                        {!! Form::open([
+                                            'method' => 'DELETE',
+                                            'route' => ['kas.destroy', $kas->id],
+                                            'style' => 'display:inline',
+                                        ]) !!}
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Apakah Anda yakin?')">Hapus</button>
+                                        {!! Form::close() !!}
                                     </td>
                                 </tr>
                             @endforeach
