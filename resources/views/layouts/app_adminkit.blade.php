@@ -397,8 +397,21 @@
     <script src="{{ asset('adminkit/js/app.js') }}"></script>
     <script src="{{ asset('js/jquery.min.js') }}"></script>
     <script src="{{ asset('js/jquery.mask.min.js') }}"></script>
+
+    <script src="{{ asset('js/popper.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <link href="{{ asset('sm/summernote-bs4.css') }}" rel="stylesheet">
+    <script src="{{ asset('sm/summernote-bs4.js') }}"></script>
+
     <script>
         $(document).ready(function() {
+
+            $('#summernote').summernote({
+                tabsize: 2,
+                height: 200
+            });
+
+
             $('.rupiah').mask("#.##0", {
                 reverse: true
             });

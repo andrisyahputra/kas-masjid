@@ -30,7 +30,11 @@
 
                         <div class="mb-3 form-group">
                             {!! Form::label('konten', 'Konten / Isi Profil', ['class' => 'form-label']) !!}
-                            {!! Form::textarea('konten', null, ['class' => 'form-control', 'placeholder' => 'Masukkan Konten Profil']) !!}
+                            {!! Form::textarea('konten', null, [
+                                'class' => 'form-control',
+                                'placeholder' => 'Masukkan Konten Profil',
+                                'id' => 'summernote',
+                            ]) !!}
                             <span class="text-danger">{{ $errors->first('konten') }}</span>
                         </div>
 
