@@ -64,8 +64,9 @@ class KasController extends Controller
         // @dd($kas);
         $kas->masjid_id = auth()->user()->masjid_id;
         $kas->created_by = auth()->user()->id;
-        $kas->saldo_akhir = $saldoAkhir;
+        // $kas->saldo_akhir = $saldoAkhir;
         $kas->save();
+        auth()->user()->masjid->update(['saldo_akhir' => $saldoAkhir]);
         return redirect()->route('kas.index')->with('success', 'Data KAS Berhasil Di Tambah');
     }
     public function edit($id)
@@ -104,7 +105,7 @@ class KasController extends Controller
         } else {
             $saldoAkhir -= $kas->jumlah;
         }
-        $kasBaru->saldo_akhir = $saldoAkhir;
+        // $kasBaru->saldo_akhir = $saldoAkhir;
         $kasBaru->save();
         // $this->hitungSaldoAkhir(); // Panggil method hitungSaldoAkhir setelah menghapus data
         return redirect()->route('kas.index')->with('success', 'Data KAS Berhasil disimpan');
