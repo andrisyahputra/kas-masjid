@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kas;
 use App\Http\Requests\StoreKasRequest;
 use App\Http\Requests\UpdateKasRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Laracasts\Flash\Flash;
 
@@ -38,6 +39,14 @@ class KasController extends Controller
             'jenis' => 'required|in:masuk,keluar',
             'jumlah' => 'required',
         ]);
+
+        $tanggalTransaksi = Carbon::parse($requestData['tanggal']);
+        $tglTransaksi = $tanggalTransaksi->format('d-m-Y');
+        $tglSekarang = Carbon::now()->format('d-m-Y');
+        if ($tglTransaksi != $tglSekarang) {
+            Flash('Data Kas gagal Ditambahkan. Tranksaski tidak bisa ditambah tanggal <b>' . $tglTransaksi . '</b>. Sebelum tanggal Sekarang <b>' . $tglSekarang . '</b>')->error();
+            return back();
+        }
 
         $requestData['jumlah'] = str_replace('.', '', $requestData['jumlah']);
 
