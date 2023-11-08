@@ -14,6 +14,8 @@ class ProfilController extends Controller
     public function index()
     {
         //
+        $profils = Profil::userMasjid()->latest()->paginate(50);
+        return view('profil_index', compact('profils'));
     }
 
     /**
@@ -21,7 +23,9 @@ class ProfilController extends Controller
      */
     public function create()
     {
-        //
+        $profil = new Profil;
+        $disable = [];
+        return view('profil_form', compact('profil'));
     }
 
     /**
