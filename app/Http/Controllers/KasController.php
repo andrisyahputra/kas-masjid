@@ -91,32 +91,62 @@ class KasController extends Controller
     {
         $validatedData = $request->validate([
             'kategori' => 'nullable',
-            'keterangan' => 'required'
+            'keterangan' => 'required',
+            'jumlah' => 'required'
         ]);
+
+        $jumlah = str_replace('.', '', $validatedData['jumlah']);
+        $saldoAkhir = Kas::saldoAkhir();
 
 
         $kas = Kas::findOrFail($id);
+
+
+        if ($kas->jenis == 'masuk') {
+            $sisa =  $jumlah - $kas->jumlah;
+            $saldoAkhir += $sisa;
+            // $saldoAwal = Kas::saldoAkhir() + $jumlah;
+            // @dd($jumlah);
+        }
+
+        if ($kas->jenis == 'keluar') {
+            $sisa =  $jumlah - $kas->jumlah;
+            // $saldoAwal = $saldoAkhir + $jumlah; //sisa awal sebelum di keluarkan
+            $saldoAkhir -= $sisa;
+            // @dd($saldoAwal);
+            // @dd($saldoAkhir);
+        }
+
+        if ($saldoAkhir <= -1) {
+            Flash('Data Kas gagal DiKeluarkan <b>' . format_rupiah($jumlah, true) . '</b>. Saldo Akhir tidak boleh kurang dari 0 <b>' . format_rupiah($saldoAkhir, true) . '</b>')->error();
+            return back();
+        }
+        // $saldoAkhir = $saldoAkhir + $jumlah;
+        $validatedData['jumlah'] = $jumlah;
         $kas->fill($validatedData);
         $kas->save();
+        auth()->user()->masjid->update(['saldo_akhir' => $saldoAkhir]);
         return redirect()->route('kas.index')->with('success', 'Data kas Berhasil Di Update');
     }
 
     public function destroy($id)
     {
         $kas = Kas::findOrFail($id);
-        $kas->keterangan = 'Dihapus Oleh ' . auth()->user()->name;
-        $kas->save();
-
-        $kasBaru = $kas->replicate();
-        $kasBaru->keterangan = 'Perbaikian data';
         $saldoAkhir = Kas::saldoAkhir();
         if ($kas->jenis == 'masuk') {
-            $saldoAkhir += $kas->jumlah;
-        } else {
             $saldoAkhir -= $kas->jumlah;
         }
+        if ($kas->jenis == 'keluar') {
+            $saldoAkhir += $kas->jumlah;
+        }
+
+        if ($saldoAkhir <= -1) {
+            Flash('Data Kas gagal dihapus. Saldo Akhir tidak boleh kurang dari 0 adalah <b> ' .  format_rupiah($saldoAkhir, true) . '</b>')->error();
+            return back();
+        }
         // $kasBaru->saldo_akhir = $saldoAkhir;
-        $kasBaru->save();
+        $kas->delete();
+        auth()->user()->masjid->update(['saldo_akhir' => $saldoAkhir]);
         // $this->hitungSaldoAkhir(); // Panggil method hitungSaldoAkhir setelah menghapus data
         return redirect()->route('kas.index')->with('success', 'Data KAS Berhasil disimpan');
     }

@@ -49,11 +49,11 @@
                         </div>
                         <div class="mb-3 form-group">
                             {!! Form::label('jumlah', 'Jumlah Tranksaksi', ['class' => 'form-label']) !!}
-                            {!! Form::text(
-                                'jumlah',
-                                null,
-                                ['class' => 'form-control rupiah', 'placeholder' => 'Masukkan Nominal'] + $disable,
-                            ) !!}
+                            {!! Form::text('jumlah', null, [
+                                'class' => 'form-control rupiah',
+                                'placeholder' => 'Masukkan Nominal',
+                                'autocomplete' => 'off',
+                            ]) !!}
                             <span class="text-danger">{{ $errors->first('jumlah') }}</span>
                         </div>
 
