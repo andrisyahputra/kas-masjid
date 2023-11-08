@@ -158,7 +158,8 @@
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
                             <h4 class="ml-2 fw-bold">
-                                {{ isset(auth()->user()->masjid->nama) ? 'Masjid ' . auth()->user()->masjid->nama : '' }}
+                                {{-- {{ isset(auth()->user()->masjid->nama) ? 'Masjid ' . auth()->user()->masjid->nama : '' }} --}}
+                                {{ 'Masjid ' . auth()->user()->masjid?->nama }}
                             </h4>
                         </li>
                     </ul>
@@ -386,6 +387,15 @@
     </div>
 
     <script src="{{ asset('adminkit/js/app.js') }}"></script>
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.mask.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.rupiah').mask("#.##0", {
+                reverse: true
+            });
+        });
+    </script>
 
 </body>
 

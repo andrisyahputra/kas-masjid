@@ -13,7 +13,7 @@ class KasController extends Controller
     // ...
     public function index()
     {
-        $kasList = Kas::latest()->paginate(50);
+        $kasList = Kas::userMasjid()->latest()->paginate(50);
         return view('kas_index', compact('kasList'));
     }
 
@@ -34,8 +34,10 @@ class KasController extends Controller
             'kategori' => 'nullable',
             'keterangan' => 'required',
             'jenis' => 'required|in:masuk,keluar',
-            'jumlah' => 'required|numeric',
+            'jumlah' => 'required',
         ]);
+
+        $requestData['jumlah'] = str_replace('.', '', $requestData['jumlah']);
 
         $saldoAwal = Kas::saldoAkhir();
         $saldoAkhir = $saldoAwal;
