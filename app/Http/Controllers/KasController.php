@@ -21,7 +21,8 @@ class KasController extends Controller
     {
         $kas = new Kas;
         $saldoAkhir = Kas::saldoAkhir();
-        return view('kas_form', compact('kas', 'saldoAkhir'));
+        $disable = [];
+        return view('kas_form', compact('kas', 'saldoAkhir', 'disable'));
     }
 
 
@@ -69,29 +70,24 @@ class KasController extends Controller
     }
     public function edit($id)
     {
-        $data = Kas::findOrFail($id);
-
-        return view('kas.edit', compact('data'));
+        $kas = Kas::findOrFail($id);
+        $saldoAkhir = Kas::saldoAkhir();
+        $disable = ['disabled' => 'disabled'];
+        return view('kas_form', compact('kas', 'saldoAkhir', 'disable'));
     }
 
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'masjid_id' => 'required',
-            'tanggal' => 'required|date',
             'kategori' => 'nullable',
-            'keterangan' => 'required',
-            'jenis' => 'required|in:masuk,keluar',
-            'jumlah' => 'required|numeric',
-            'created_by' => 'require',
+            'keterangan' => 'required'
         ]);
 
 
         $kas = Kas::findOrFail($id);
-        $kas->update($request->all());
-        $kas->saldo_akhir = $this->calculateSaldoAkhir($kas->tanggal);
+        $kas->fill($validatedData);
         $kas->save();
-        return redirect()->route('kas.index')->with('success', 'Data KAS Berhasil Di Update');
+        return redirect()->route('kas.index')->with('success', 'Data kas Berhasil Di Update');
     }
 
     public function destroy($id)
@@ -99,25 +95,5 @@ class KasController extends Controller
         Kas::findOrFail($id)->delete();
         // $this->hitungSaldoAkhir(); // Panggil method hitungSaldoAkhir setelah menghapus data
         return redirect()->route('kas.index')->with('success', 'Data KAS Berhasil Dihapus');
-    }
-
-    private function calculateSaldoAkhir($tanggal)
-    {
-        $transactions = Kas::where('tanggal', '<=', $tanggal)
-            ->orderBy('tanggal')
-            ->orderBy('id')
-            ->get();
-
-        $saldo = 0;
-
-        foreach ($transactions as $transaction) {
-            if ($transaction->jenis == 'masuk') {
-                $saldo += $transaction->jumlah;
-            } else {
-                $saldo -= $transaction->jumlah;
-            }
-        }
-
-        return $saldo;
     }
 }

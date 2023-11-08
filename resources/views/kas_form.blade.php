@@ -15,10 +15,14 @@
 
                         <div class="mb-3 form-group">
                             {!! Form::label('tanggal', 'Tanggal', ['class' => 'form-label']) !!}
-                            {!! Form::date('tanggal', $kas->tanggal ?? now(), [
-                                'class' => 'form-control',
-                                'placeholder' => 'Masukkan Tanngal',
-                            ]) !!}
+                            {!! Form::date(
+                                'tanggal',
+                                $kas->tanggal ?? now(),
+                                [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Masukkan Tanngal',
+                                ] + $disable,
+                            ) !!}
 
                         </div>
                         <div class="mb-3 form-group">
@@ -34,18 +38,22 @@
                         <div class="mb-3 form-group">
                             {!! Form::label('jenis', 'Jenis', ['class' => 'form-label']) !!}
                             <div class="form-check">
-                                {!! Form::radio('jenis', 'masuk', true, ['class' => 'form-check-input', 'id' => 'jenisMasuk']) !!}
+                                {!! Form::radio('jenis', 'masuk', true, ['class' => 'form-check-input', 'id' => 'jenisMasuk'] + $disable) !!}
                                 {!! Form::label('jenisMasuk', 'Pemasukkan', ['class' => 'form-check-label']) !!}
                             </div>
                             <div class="form-check">
-                                {!! Form::radio('jenis', 'keluar', false, ['class' => 'form-check-input', 'id' => 'jenisKeluar']) !!}
+                                {!! Form::radio('jenis', 'keluar', false, ['class' => 'form-check-input', 'id' => 'jenisKeluar'] + $disable) !!}
                                 {!! Form::label('jenisKeluar', 'Pengeluaran', ['class' => 'form-check-label']) !!}
                             </div>
                             <span class="text-danger">{{ $errors->first('jenis') }}</span>
                         </div>
                         <div class="mb-3 form-group">
                             {!! Form::label('jumlah', 'Jumlah Tranksaksi', ['class' => 'form-label']) !!}
-                            {!! Form::text('jumlah', null, ['class' => 'form-control rupiah', 'placeholder' => 'Masukkan Nominal']) !!}
+                            {!! Form::text(
+                                'jumlah',
+                                null,
+                                ['class' => 'form-control rupiah', 'placeholder' => 'Masukkan Nominal'] + $disable,
+                            ) !!}
                             <span class="text-danger">{{ $errors->first('jumlah') }}</span>
                         </div>
 
