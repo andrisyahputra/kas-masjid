@@ -25,8 +25,8 @@
                                 <th>Tanggal</th>
                                 <th>Kategori</th>
                                 <th>Keterangan</th>
-                                <th>Jenis</th>
-                                <th>Jumlah</th>
+                                <th>Pemasukkan</th>
+                                <th>Pengeluaran</th>
                                 <th>Saldo Akhir</th>
                                 <th>Diinput Oleh</th>
                                 <th>Aksi</th>
@@ -39,8 +39,12 @@
                                     <td>{{ $kas->tanggal->translatedFormat('d-m-Y') }}</td>
                                     <td>{{ $kas->kategori ?? 'Umum' }}</td>
                                     <td>{{ $kas->keterangan }}</td>
-                                    <td>{{ $kas->jenis }}</td>
-                                    <td>{{ format_rupiah($kas->jumlah, true) }}</td>
+                                    <td>
+                                        {{ $kas->jenis == 'masuk' ? format_rupiah($kas->jumlah, true) : '-' }}
+                                    </td>
+                                    <td>
+                                        {{ $kas->jenis == 'keluar' ? format_rupiah($kas->jumlah, true) : '-' }}
+                                    </td>
                                     <td>{{ format_rupiah($kas->saldo_akhir, true) }}</td>
                                     <td>{{ $kas->createdBy->name }}</td>
                                     <td>
