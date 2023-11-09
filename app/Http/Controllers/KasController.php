@@ -12,11 +12,21 @@ use Laracasts\Flash\Flash;
 class KasController extends Controller
 {
     // ...
-    public function index()
+    public function index(Request $request)
     {
-        $kasList = Kas::userMasjid()->latest()->paginate(50);
+        $query = Kas::userMasjid();
+        if ($request->filled('q')) {
+            $query = $query->where('keterangan', 'LIKE', '%' . $request->q . '%');
+        }
+        if ($request->filled('tanggal')) {
+            $query = $query->where('tanggal', $request->tanggal);
+        }
+
+        $kasList = $query->latest()->paginate(50);
         $saldoAkhir = Kas::saldoAkhir();
-        return view('kas_index', compact('kasList', 'saldoAkhir'));
+        $pemasukkan = $kasList->where('jenis', 'masuk')->sum('jumlah');
+        $pengeluaran = $kasList->where('jenis', 'keluar')->sum('jumlah');
+        return view('kas_index', compact('kasList', 'saldoAkhir', 'pemasukkan', 'pengeluaran'));
     }
 
     public function create()
