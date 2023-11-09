@@ -22,12 +22,8 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Tanggal</th>
-                                <th>Kategori</th>
-                                <th>Keterangan</th>
-                                <th>Pemasukkan</th>
-                                <th>Pengeluaran</th>
-                                <th>Saldo Akhir</th>
+                                <th>Judul</th>
+                                <th>Konten</th>
                                 <th>Diinput Oleh</th>
                                 <th>Aksi</th>
                             </tr>
@@ -35,21 +31,22 @@
                         <tbody>
                             @foreach ($profils as $profil)
                                 <tr>
+                                    {{-- $table->foreignId('masjid_id');
+                                                $table->string('slug');
+                                                $table->string('judul');
+                                                $table->string('kategori');
+                                                $table->string('konten');
+                                                $table->string('created_by'); --}}
                                     <td>{{ $profil->id }}</td>
-                                    <td>{{ $profil->tanggal->translatedFormat('d-m-Y') }}</td>
-                                    <td>{{ $profil->kategori ?? 'Umum' }}</td>
-                                    <td>{{ $profil->keterangan }}</td>
-                                    <td>
-                                        {{ $profil->jenis == 'masuk' ? format_rupiah($profil->jumlah, true) : '-' }}
-                                    </td>
-                                    <td>
-                                        {{ $profil->jenis == 'keluar' ? format_rupiah($profil->jumlah, true) : '-' }}
-                                    </td>
-                                    <td>{{ format_rupiah($profil->saldo_akhir, true) }}</td>
+                                    <td>{{ $profil->judul }}</td>
+                                    <td>{{ strip_tags($profil->konten) }}</td>
                                     <td>{{ $profil->createdBy->name }}</td>
                                     <td>
                                         <a href="{{ route('profil.edit', $profil->id) }}"
                                             class="btn btn-primary btn-sm">Edit</a>
+
+                                        <a href="{{ route('profil.show', $profil->id) }}"
+                                            class="btn btn-primary btn-sm">Detail</a>
 
                                         {!! Form::open([
                                             'method' => 'DELETE',

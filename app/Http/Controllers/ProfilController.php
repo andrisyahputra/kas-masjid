@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Profil;
-use App\Http\Requests\StoreProfilRequest;
-use App\Http\Requests\UpdateProfilRequest;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Traits\ConvertContentImageBase64ToUrl;
 
 class ProfilController extends Controller
+
 {
+    use ConvertContentImageBase64ToUrl;
     /**
      * Display a listing of the resource.
      */
@@ -37,17 +40,31 @@ class ProfilController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProfilRequest $request)
+    public function store(Request $request)
     {
         //
+        // @dd($request->all());
+        $requestData = $request->validate([
+            'kategori' => 'required',
+            'judul' => 'required',
+            'konten' => 'required',
+        ]);
+        $kontenWithUrls = $this->convertBase64ImagesToUrls($requestData['konten']);
+        $requestData['konten'] = $kontenWithUrls;
+        // $requestData['slug'] = Str::slug($request->judul);
+        Profil::create($requestData);
+        flash('Data Berhasil Disimpan');
+        return back();
     }
+
 
     /**
      * Display the specified resource.
      */
     public function show(Profil $profil)
     {
-        //
+        $data['profil'] = $profil;
+        return view('profil_show', $data);
     }
 
     /**
@@ -55,15 +72,34 @@ class ProfilController extends Controller
      */
     public function edit(Profil $profil)
     {
-        //
+        $data['profil'] = $profil;
+        $data['route'] = ['profil.update', $profil->id];
+        $data['method'] = 'PUT';
+        $data['listKategori'] = [
+            'visi-misi' => 'Misi Visi',
+            'sejarah' => 'Sejarah',
+            'struktur-organisasi' => 'Struktur Organisasi'
+        ];
+        return view('profil_form', $data);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProfilRequest $request, Profil $profil)
+    public function update(Request $request, Profil $profil)
     {
-        //
+        $requestData = $request->validate([
+            'kategori' => 'required',
+            'judul' => 'required',
+            'konten' => 'required',
+        ]);
+        $kontenWithUrls = $this->convertBase64ImagesToUrls($requestData['konten']);
+        $requestData['konten'] = $kontenWithUrls;
+        // $requestData['slug'] = Str::slug($request->judul);
+        $profil = Profil::findOrFail($profil->id);
+        $profil->update($requestData);
+        flash('Data Berhasil Diubah');
+        return back();
     }
 
     /**
@@ -71,6 +107,8 @@ class ProfilController extends Controller
      */
     public function destroy(Profil $profil)
     {
-        //
+        $profil->delete();
+        flash('Data Berhasil Dihapus');
+        return back();
     }
 }
