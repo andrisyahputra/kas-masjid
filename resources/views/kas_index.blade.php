@@ -43,7 +43,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="{{ config('app.table_style') }}">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -71,8 +71,7 @@
                                             {{ $kas->jenis == 'keluar' ? format_rupiah($kas->jumlah, true) : '-' }}
                                         </td>
                                         <td>
-                                            <a href="{{ route('kas.edit', $kas->id) }}"
-                                                class="btn btn-primary btn-sm">Edit</a>
+
 
                                             {!! Form::open([
                                                 'method' => 'DELETE',
@@ -80,7 +79,10 @@
                                                 'style' => 'display:inline',
                                             ]) !!}
                                             @csrf
-                                            @method('DELETE')
+
+                                            <a href="{{ route('kas.edit', $kas->id) }}"
+                                                class="btn btn-primary btn-sm mb-1">Edit</a>
+
                                             <button type="submit" class="btn btn-danger btn-sm"
                                                 onclick="return confirm('Apakah Anda yakin?')">Hapus</button>
                                             {!! Form::close() !!}

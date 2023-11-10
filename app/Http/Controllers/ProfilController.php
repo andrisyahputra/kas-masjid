@@ -17,8 +17,9 @@ class ProfilController extends Controller
     public function index()
     {
         //
-        $profils = Profil::userMasjid()->latest()->paginate(50);
-        return view('profil_index', compact('profils'));
+        $models = Profil::userMasjid()->latest()->paginate(50);
+        $title = "Profil Masjid";
+        return view('profil_index', compact('models', 'title'));
     }
 
     /**
@@ -27,6 +28,7 @@ class ProfilController extends Controller
     public function create()
     {
         $data['profil'] = new Profil;
+        $data['title'] = 'Tambah Profil Masjid';
         $data['route'] = 'profil.store';
         $data['method'] = 'POST';
         $data['listKategori'] = [
@@ -64,6 +66,7 @@ class ProfilController extends Controller
     public function show(Profil $profil)
     {
         $data['profil'] = $profil;
+        $data['title'] = 'Detail Profil Masjid';
         return view('profil_show', $data);
     }
 
@@ -73,6 +76,7 @@ class ProfilController extends Controller
     public function edit(Profil $profil)
     {
         $data['profil'] = $profil;
+        $data['title'] = 'Edit Profil Masjid';
         $data['route'] = ['profil.update', $profil->id];
         $data['method'] = 'PUT';
         $data['listKategori'] = [

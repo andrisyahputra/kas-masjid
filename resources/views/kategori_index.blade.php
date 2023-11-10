@@ -15,21 +15,21 @@
         <div class="col">
             <div class="card">
                 <div class="text-right m-3">
-                    <a href="{{ route('profil.create') }}" class="btn btn-primary">Tambah Data</a>
+                    <a href="{{ route('kategori.create') }}" class="btn btn-primary">Tambah Data</a>
                 </div>
                 <div class="card-body">
                     <table class="{{ config('app.table_style') }}">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Judul</th>
-                                <th>Konten</th>
+                                <th>Nama</th>
+                                <th>Keterangan</th>
                                 <th>Diinput Oleh</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($models as $profil)
+                            @foreach ($models as $data)
                                 <tr>
                                     {{-- $table->foreignId('masjid_id');
                                                 $table->string('slug');
@@ -37,24 +37,24 @@
                                                 $table->string('kategori');
                                                 $table->string('konten');
                                                 $table->string('created_by'); --}}
-                                    <td>{{ $profil->id }}</td>
-                                    <td>{{ $profil->judul }}</td>
-                                    <td>{{ strip_tags($profil->konten) }}</td>
-                                    <td>{{ $profil->createdBy->name }}</td>
+                                    <td>{{ $data->id }}</td>
+                                    <td>{{ $data->nama }}</td>
+                                    <td>{{ strip_tags($data->keterangan) }}</td>
+                                    <td>{{ $data->createdBy->name }}</td>
                                     <td>
 
 
                                         {!! Form::open([
                                             'method' => 'DELETE',
-                                            'route' => ['profil.destroy', $profil->id],
+                                            'route' => ['kategori.destroy', $data->id],
                                             'style' => 'display:inline',
                                         ]) !!}
                                         @csrf
 
-                                        <a href="{{ route('profil.edit', $profil->id) }}"
+                                        <a href="{{ route('kategori.edit', $data->id) }}"
                                             class="btn btn-primary btn-sm mb-1">Edit</a>
 
-                                        <a href="{{ route('profil.show', $profil->id) }}"
+                                        <a href="{{ route('kategori.show', $data->id) }}"
                                             class="btn btn-primary btn-sm mb-1">Detail</a>
 
                                         <button type="submit" class="btn btn-danger btn-sm"

@@ -10,32 +10,28 @@
                     </div>
                     <div class="card-body">
 
-                        {!! Form::model($profil, [
+                        {!! Form::model($model, [
                             'route' => $route,
                             'method' => $method,
                         ]) !!}
 
-
                         <div class="mb-3 form-group">
-                            {!! Form::label('kategori', 'Kategori', ['class' => 'form-label']) !!}
-                            {!! Form::select('kategori', $listKategori, null, ['class' => 'form-control']) !!}
-                            <span class="text-danger">{{ $errors->first('kategori') }}</span>
-                        </div>
-
-                        <div class="mb-3 form-group">
-                            {!! Form::label('judul', 'Judul', ['class' => 'form-label']) !!}
-                            {!! Form::text('judul', null, ['class' => 'form-control']) !!}
-                            <span class="text-danger">{{ $errors->first('judul') }}</span>
-                        </div>
-
-                        <div class="mb-3 form-group">
-                            {!! Form::label('konten', 'Konten / Isi Profil', ['class' => 'form-label']) !!}
-                            {!! Form::textarea('konten', null, [
+                            {!! Form::label('nama', 'Nama Kategori', ['class' => 'form-label']) !!}
+                            {!! Form::text('nama', null, [
                                 'class' => 'form-control',
-                                'placeholder' => 'Masukkan Konten Profil',
+                                'placeholder' => 'Misalnya, Agenda, Informasi Pengajian dan Kategori Lainya ',
+                            ]) !!}
+                            <span class="text-danger">{{ $errors->first('nama') }}</span>
+                        </div>
+
+                        <div class="mb-3 form-group">
+                            {!! Form::label('keterangan', 'Keterangan Kategori Profil', ['class' => 'form-label']) !!}
+                            {!! Form::textarea('keterangan', null, [
+                                'class' => 'form-control',
+                                'placeholder' => 'Masukkan keterangan Masjid',
                                 'id' => 'summernote',
                             ]) !!}
-                            <span class="text-danger">{{ $errors->first('konten') }}</span>
+                            <span class="text-danger">{{ $errors->first('keterangan') }}</span>
                         </div>
 
                         <div class="text-center">
