@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\KurbanHewan;
 use App\Http\Requests\StoreKurbanHewanRequest;
 use App\Http\Requests\UpdateKurbanHewanRequest;
+use App\Models\Kurban;
 
 class KurbanHewanController extends Controller
 {
@@ -21,7 +22,13 @@ class KurbanHewanController extends Controller
      */
     public function create()
     {
-        //
+        $kurban = Kurban::userMasjid()->where('id', request('kurban_id'))->firstOrFail();
+        $data['model'] = new KurbanHewan;
+        $data['title'] = 'Tambah Data Hewan Kurban';
+        $data['route'] = 'kurbanhewan.store';
+        $data['method'] = 'POST';
+        $data['kurban'] = $kurban;
+        return view('kurbanhewan_form', $data);
     }
 
     /**
@@ -29,7 +36,10 @@ class KurbanHewanController extends Controller
      */
     public function store(StoreKurbanHewanRequest $request)
     {
-        //
+        // dd($request->validated());
+        KurbanHewan::create($request->validated());
+        flash('Data Berhasil Disimpan');
+        return back();
     }
 
     /**
@@ -43,24 +53,35 @@ class KurbanHewanController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(KurbanHewan $kurbanHewan)
+    public function edit(KurbanHewan $kurbanhewan)
     {
-        //
+        $kurban = Kurban::userMasjid()->where('id', request('kurban_id'))->firstOrFail();
+        $data['model'] = $kurbanhewan;
+        $data['title'] = 'Ubah Data Hewan Kurban';
+        $data['route'] = ['kurbanhewan.update', $kurbanhewan->id];
+        $data['method'] = 'PUT';
+        $data['kurban'] = $kurban;
+        return view('kurbanhewan_form', $data);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateKurbanHewanRequest $request, KurbanHewan $kurbanHewan)
+    public function update(UpdateKurbanHewanRequest $request, KurbanHewan $kurbanhewan)
     {
-        //
+        $kurbanhewan->update($request->validated());
+        flash('Data Berhasil Disimpan');
+        return back();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(KurbanHewan $kurbanHewan)
+    public function destroy(KurbanHewan $kurbanhewan)
     {
-        //
+        Kurban::userMasjid()->where('id', request('kurban_id'))->firstOrFail();
+        $kurbanhewan->delete();
+        flash('Data Berhasil Dihapus');
+        return back();
     }
 }
