@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('masjids', function (Blueprint $table) {
             //
-            $table->bigInteger('saldo_akhir')->defauld(0);
+            $table->bigInteger('saldo_akhir')->default(0);
         });
     }
 

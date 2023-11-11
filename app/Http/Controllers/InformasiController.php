@@ -87,8 +87,7 @@ class InformasiController extends Controller
         ]);
         $kontenWithUrls = $this->convertBase64ImagesToUrls($requestData['konten']);
         $requestData['konten'] = $kontenWithUrls;
-        $model = Informasi::findOrFail($informasi->id);
-        $model->update($requestData);
+        $informasi->update($requestData);
         flash('Data Berhasil Diubah');
         return back();
     }

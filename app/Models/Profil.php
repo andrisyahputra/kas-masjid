@@ -19,5 +19,4 @@ class Profil extends Model
     // protected $contentName = 'konten';
 
 
-
 }

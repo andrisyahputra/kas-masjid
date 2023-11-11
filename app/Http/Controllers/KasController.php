@@ -89,15 +89,17 @@ class KasController extends Controller
         auth()->user()->masjid->update(['saldo_akhir' => $saldoAkhir]);
         return redirect()->route('kas.index')->with('success', 'Data KAS Berhasil Di Tambah');
     }
-    public function edit($id)
+    public function edit(Kas $ka)
     {
-        $kas = Kas::findOrFail($id);
+        // dd($ka);
+        // $kas = Kas::userMasjid()->findOrFail($id);
+        $kas = $ka;
         $saldoAkhir = Kas::saldoAkhir();
         $disable = ['disabled' => 'disabled'];
         return view('kas_form', compact('kas', 'saldoAkhir', 'disable'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Kas $ka)
     {
         $validatedData = $request->validate([
             'kategori' => 'nullable',
@@ -109,7 +111,7 @@ class KasController extends Controller
         $saldoAkhir = Kas::saldoAkhir();
 
 
-        $kas = Kas::findOrFail($id);
+        $kas = $ka;
 
 
         if ($kas->jenis == 'masuk') {
@@ -139,9 +141,9 @@ class KasController extends Controller
         return redirect()->route('kas.index')->with('success', 'Data kas Berhasil Di Update');
     }
 
-    public function destroy($id)
+    public function destroy(Kas $ka)
     {
-        $kas = Kas::findOrFail($id);
+        $kas = $ka;
         $saldoAkhir = Kas::saldoAkhir();
         if ($kas->jenis == 'masuk') {
             $saldoAkhir -= $kas->jumlah;

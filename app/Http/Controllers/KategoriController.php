@@ -83,9 +83,7 @@ class KategoriController extends Controller
         ]);
         $kontenWithUrls = $this->convertBase64ImagesToUrls($requestData['keterangan']);
         $requestData['keterangan'] = $kontenWithUrls;
-        // $requestData['slug'] = Str::slug($request->judul);
-        $model = Kategori::findOrFail($kategori->id);
-        $model->update($requestData);
+        $kategori->update($requestData);
         flash('Data Berhasil Diubah');
         return back();
     }
