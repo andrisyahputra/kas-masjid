@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kategori;
-use App\Models\Informasi;
+use App\Models\Kurban;
 use Illuminate\Http\Request;
-use App\Models\Profil;
+use App\Http\Requests\StoreKurbanRequest;
+use App\Http\Requests\UpdateKurbanRequest;
 use App\Traits\ConvertContentImageBase64ToUrl;
 
-class InformasiController extends Controller
+class KurbanController extends Controller
 {
     use ConvertContentImageBase64ToUrl;
     /**
@@ -16,9 +16,9 @@ class InformasiController extends Controller
      */
     public function index()
     {
-        $models = Informasi::userMasjid()->latest()->paginate(50);
-        $title = "Informasi Masjid";
-        return view('informasi_index', compact('models', 'title'));
+        $models = Kurban::userMasjid()->latest()->paginate(50);
+        $title = "Data Kurban Masjid";
+        return view('kurban_index', compact('models', 'title'));
     }
 
     /**
@@ -26,12 +26,11 @@ class InformasiController extends Controller
      */
     public function create()
     {
-        $data['model'] = new Informasi;
-        $data['title'] = 'Tambah Informasi Baru Masjid';
-        $data['route'] = 'informasi.store';
+        $data['model'] = new Kurban;
+        $data['title'] = 'Tambah Data Kurban Masjid';
+        $data['route'] = 'kurban.store';
         $data['method'] = 'POST';
-        $data['kategoris'] = Kategori::pluck('nama', 'id');
-        return view('informasi_form', $data);
+        return view('kurban_form', $data);
     }
 
     /**
@@ -40,14 +39,15 @@ class InformasiController extends Controller
     public function store(Request $request)
     {
         $requestData = $request->validate([
-            'kategori' => 'required',
-            'judul' => 'required',
+            'tahun_hijriah' => 'required',
+            'tahun_masehi' => 'required',
+            'tanggal_akhir_pendaftaran' => 'required',
             'konten' => 'nullable',
         ]);
         $kontenWithUrls = $this->convertBase64ImagesToUrls($requestData['konten']);
         $requestData['konten'] = $kontenWithUrls;
         // $requestData['slug'] = Str::slug($request->judul);
-        Informasi::create($requestData);
+        Kurban::create($requestData);
         flash('Data Berhasil Disimpan');
         return back();
     }
@@ -55,39 +55,39 @@ class InformasiController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Informasi $informasi)
+    public function show(Kurban $kurban)
     {
-        $data['model'] = $informasi;
-        $data['title'] = 'Detail Informasi Masjid';
-        return view('informasi_show', $data);
+        // $data['model'] = $informasi;
+        // $data['title'] = 'Detail Informasi Masjid';
+        // return view('informasi_show', $data);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Informasi $informasi)
+    public function edit(Kurban $kurban)
     {
-        $data['model'] = $informasi;
-        $data['title'] = 'Edit Informasi Masjid';
-        $data['route'] = ['informasi.update', $informasi->id];
+        $data['model'] = $kurban;
+        $data['title'] = 'Edit Data Kurban Masjid';
+        $data['route'] = ['kurban.update', $kurban->id];
         $data['method'] = 'PUT';
-        $data['kategoris'] = Kategori::pluck('nama', 'id');
-        return view('informasi_form', $data);
+        return view('kurban_form', $data);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Informasi $informasi)
+    public function update(Request $request, Kurban $kurban)
     {
         $requestData = $request->validate([
-            'kategori' => 'required',
-            'judul' => 'required',
+            'tahun_hijriah' => 'required',
+            'tahun_masehi' => 'required',
+            'tanggal_akhir_pendaftaran' => 'required',
             'konten' => 'nullable',
         ]);
         $kontenWithUrls = $this->convertBase64ImagesToUrls($requestData['konten']);
         $requestData['konten'] = $kontenWithUrls;
-        $informasi->update($requestData);
+        $kurban->update($requestData);
         flash('Data Berhasil Diubah');
         return back();
     }
@@ -95,9 +95,9 @@ class InformasiController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Informasi $informasi)
+    public function destroy(Kurban $kurban)
     {
-        $informasi->delete();
+        $kurban->delete();
         flash('Data Berhasil Dihapus');
         return back();
     }

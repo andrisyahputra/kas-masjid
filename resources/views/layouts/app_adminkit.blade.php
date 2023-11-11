@@ -82,6 +82,20 @@
                         </a>
                     </li>
 
+                    <li class="sidebar-item {{ Route::is('masjidbank.*') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('masjidbank.index') }}">
+                            <i class="align-middle" data-feather="user"></i> <span class="align-middle">Data Bank
+                                Masjid</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item {{ Route::is('kurban.*') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('kurban.index') }}">
+                            <i class="align-middle" data-feather="user"></i> <span class="align-middle">Data Kurban
+                                Masjid</span>
+                        </a>
+                    </li>
+
                 </ul>
 
             </div>
@@ -334,8 +348,12 @@
     <link href="{{ asset('sm/summernote-bs4.css') }}" rel="stylesheet">
     <script src="{{ asset('sm/summernote-bs4.js') }}"></script>
 
+    <link href="{{ asset('select2/css/select2.min.css') }}" rel="stylesheet" />
+    <script src="{{ asset('select2/js/select2.min.js') }}"></script>
+
     <script>
         $(document).ready(function() {
+            $('.select2').select2();
 
             $('#summernote').summernote({
                 tabsize: 2,

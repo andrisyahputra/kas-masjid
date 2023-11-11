@@ -100,7 +100,6 @@ class ProfilController extends Controller
         $kontenWithUrls = $this->convertBase64ImagesToUrls($requestData['konten']);
         $requestData['konten'] = $kontenWithUrls;
         // $requestData['slug'] = Str::slug($request->judul);
-        $profil = Profil::findOrFail($profil->id);
         $profil->update($requestData);
         flash('Data Berhasil Diubah');
         return back();
