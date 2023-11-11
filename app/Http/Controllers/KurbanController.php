@@ -57,9 +57,9 @@ class KurbanController extends Controller
      */
     public function show(Kurban $kurban)
     {
-        // $data['model'] = $informasi;
-        // $data['title'] = 'Detail Informasi Masjid';
-        // return view('informasi_show', $data);
+        $data['model'] = $kurban;
+        $data['title'] = 'Detail Informasi Kurban Masjid';
+        return view('kurban_show', $data);
     }
 
     /**
