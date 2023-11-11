@@ -95,6 +95,8 @@ class KategoriController extends Controller
      */
     public function destroy(Kategori $kategori)
     {
-        //
+        $kategori->delete();
+        flash('Data Berhasil Dihapus');
+        return back();
     }
 }
