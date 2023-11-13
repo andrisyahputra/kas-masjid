@@ -97,8 +97,17 @@ class KurbanController extends Controller
      */
     public function destroy(Kurban $kurban)
     {
+        if ($kurban->kurbanHewan()->count() >= 1) {
+            flash('Data Kurban Tidak Bisa dihapus Karena Sudah Memiliki Data Hewan Kurban')->error();
+            return back();
+        }
+
+        if ($kurban->kurbanPeserta()->count() >= 1) {
+            flash('Data Kurban Tidak Bisa dihapus Karena Sudah Memiliki Data Peserta Hewan')->error();
+            return back();
+        }
         $kurban->delete();
-        flash('Data Berhasil Dihapus');
+        flash('Data Berhasil Dihapus')->success();
         return back();
     }
 }
