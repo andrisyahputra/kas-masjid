@@ -96,7 +96,7 @@
                         <div class="text-center"><a class="btn btn-success mb-3"
                                 href="{{ route('kurbanpeserta.create', [
                                     'kurban_id' => $model->id,
-                                ]) }}">Buat
+                                ]) }}">Pendaftaran
                                 Baru</a></div>
                     @endif
 
@@ -132,28 +132,33 @@
                                         <td>
                                             {{ $item->status }}
                                             @if ($item->status_bayar == 'lunas')
-                                                <span class="badge bg-success">LUNAS</span>
+                                                <span class="badge bg-success">{{ $item->getStatusTeks() }}</span>
                                             @else
-                                                <span class="badge bg-secondary">BELUM LUNAS</span>
+                                                <span class="badge bg-secondary">{{ $item->getStatusTeks() }}</span>
                                             @endif
                                         </td>
                                         <td>{{ ucwords($item->kurbanHewan->hewan) . ' - ' . $item->kurbanHewan->kriteria . ' - ' . format_rupiah($item->kurbanHewan->iuran_perorang) }}
                                         </td>
                                         <td>
+                                            @if ($item->status_bayar != 'lunas')
+                                                {!! Form::open([
+                                                    'method' => 'DELETE',
+                                                    'route' => ['kurbanpeserta.destroy', [$item->id, 'kurban_id' => $item->kurban_id]],
+                                                    'style' => 'display:inline',
+                                                ]) !!}
+                                                @csrf
+
+                                                <a href="{{ route('kurbanpeserta.edit', [$item->id, 'kurban_id' => $item->kurban_id]) }}"
+                                                    class="btn btn-primary btn-sm mb-1">Pembayaran Kurban</a>
+
+                                                <button type="submit" class="btn btn-danger btn-sm"
+                                                    onclick="return confirm('Apakah Anda yakin?')">Hapus</button>
+                                                {!! Form::close() !!}
+                                            @else
+                                                Sudah Lunas
+                                            @endif
                                             {{-- {{ dd($model->id) }} --}}
-                                            {!! Form::open([
-                                                'method' => 'DELETE',
-                                                'route' => ['kurbanpeserta.destroy', [$item->id, 'kurban_id' => $item->id]],
-                                                'style' => 'display:inline',
-                                            ]) !!}
-                                            @csrf
 
-                                            {{-- <a href="{{ route('kurbanpeserta.edit', [$model->id, 'kurban_id' => $model->id]) }}"
-                                                class="btn btn-primary btn-sm mb-1">Edit</a> --}}
-
-                                            <button type="submit" class="btn btn-danger btn-sm"
-                                                onclick="return confirm('Apakah Anda yakin?')">Hapus</button>
-                                            {!! Form::close() !!}
                                         </td>
                                     </tr>
                                 @endforeach
