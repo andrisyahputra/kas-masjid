@@ -28,4 +28,13 @@ class Kurban extends Model
     {
         return $this->hasMany(KurbanHewan::class);
     }
+    /**
+     * Get all of the kurbanPeserta for the Kurban
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function kurbanPeserta(): HasMany
+    {
+        return $this->hasMany(KurbanPeserta::class);
+    }
 }

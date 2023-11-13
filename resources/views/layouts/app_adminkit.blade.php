@@ -367,6 +367,7 @@
             });
         });
     </script>
+    @yield('js')
 
 </body>
 

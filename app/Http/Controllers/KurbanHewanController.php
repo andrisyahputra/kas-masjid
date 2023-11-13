@@ -79,9 +79,15 @@ class KurbanHewanController extends Controller
      */
     public function destroy(KurbanHewan $kurbanhewan)
     {
+        // dd($kurbanhewan);
         Kurban::userMasjid()->where('id', request('kurban_id'))->firstOrFail();
-        $kurbanhewan->delete();
-        flash('Data Berhasil Dihapus');
+        // dd($kurbanhewan->kurbanPeserta->count());
+        if ($kurbanhewan->kurbanPeserta->count() == 0) {
+            $kurbanhewan->delete();
+            flash('Data Hewan Kurban Berhasil Dihapus');
+            return back();
+        }
+        flash('Data Hewan Kurban Tidak Berhasil Dihapus, Karena Hewan Kurban dipakai Peserta Lain');
         return back();
     }
 }
