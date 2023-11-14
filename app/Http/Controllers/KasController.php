@@ -66,21 +66,21 @@ class KasController extends Controller
 
         $requestData['jumlah'] = str_replace('.', '', $requestData['jumlah']);
 
-        $saldoAwal = Kas::saldoAkhir();
-        $saldoAkhir = $saldoAwal;
-        // @dd($saldoAkhir);
+        // $saldoAwal = Kas::saldoAkhir();
+        // $saldoAkhir = $saldoAwal;
+        // // @dd($saldoAkhir);
 
-        if ($requestData['jenis'] == 'masuk') {
-            $saldoAkhir += $requestData['jumlah'];
-        } else {
-            $saldoAkhir -= $requestData['jumlah'];
-        }
+        // if ($requestData['jenis'] == 'masuk') {
+        //     $saldoAkhir += $requestData['jumlah'];
+        // } else {
+        //     $saldoAkhir -= $requestData['jumlah'];
+        // }
 
 
-        if ($saldoAkhir <= -1) {
-            Flash('Data Kas gagal DiKeluarkan <b>' . format_rupiah($requestData['jumlah'], true) . '</b>. Saldo Akhir tidak boleh kurang dari 0. saldo terakhir sisa <b>' . format_rupiah($saldoAwal, true) . '</b>')->error();
-            return back();
-        }
+        // if ($saldoAkhir <= -1) {
+        //     Flash('Data Kas gagal DiKeluarkan <b>' . format_rupiah($requestData['jumlah'], true) . '</b>. Saldo Akhir tidak boleh kurang dari 0. saldo terakhir sisa <b>' . format_rupiah($saldoAwal, true) . '</b>')->error();
+        //     return back();
+        // }
 
         // @dd($saldoAkhir);
 
@@ -92,7 +92,7 @@ class KasController extends Controller
         // $kas->created_by = auth()->user()->id;
         // $kas->saldo_akhir = $saldoAkhir;
         $kas->save();
-        auth()->user()->masjid->update(['saldo_akhir' => $saldoAkhir]);
+        // auth()->user()->masjid->update(['saldo_akhir' => $saldoAkhir]);
         return redirect()->route('kas.index')->with('success', 'Data KAS Berhasil Di Tambah');
     }
     public function edit(Kas $ka)
@@ -114,26 +114,26 @@ class KasController extends Controller
         ]);
 
         $jumlah = str_replace('.', '', $validatedData['jumlah']);
-        $saldoAkhir = Kas::saldoAkhir();
-
-
         $kas = $ka;
 
 
-        if ($kas->jenis == 'masuk') {
-            $sisa =  $jumlah - $kas->jumlah;
-            $saldoAkhir += $sisa;
-            // $saldoAwal = Kas::saldoAkhir() + $jumlah;
-            // @dd($jumlah);
-        }
 
-        if ($kas->jenis == 'keluar') {
-            $sisa =  $jumlah - $kas->jumlah;
-            // $saldoAwal = $saldoAkhir + $jumlah; //sisa awal sebelum di keluarkan
-            $saldoAkhir -= $sisa;
-            // @dd($saldoAwal);
-            // @dd($saldoAkhir);
-        }
+
+        $saldoAkhir = Kas::saldoAkhir();
+        // if ($kas->jenis == 'masuk') {
+        //     $sisa =  $jumlah - $kas->jumlah;
+        //     $saldoAkhir += $sisa;
+        //     // $saldoAwal = Kas::saldoAkhir() + $jumlah;
+        //     // @dd($jumlah);
+        // }
+
+        // if ($kas->jenis == 'keluar') {
+        //     $sisa =  $jumlah - $kas->jumlah;
+        //     // $saldoAwal = $saldoAkhir + $jumlah; //sisa awal sebelum di keluarkan
+        //     $saldoAkhir -= $sisa;
+        //     // @dd($saldoAwal);
+        //     // @dd($saldoAkhir);
+        // }
 
         if ($saldoAkhir <= -1) {
             Flash('Data Kas gagal DiKeluarkan <b>' . format_rupiah($jumlah, true) . '</b>. Saldo Akhir tidak boleh kurang dari 0 <b>' . format_rupiah($saldoAkhir, true) . '</b>')->error();
@@ -143,7 +143,7 @@ class KasController extends Controller
         $validatedData['jumlah'] = $jumlah;
         $kas->fill($validatedData);
         $kas->save();
-        auth()->user()->masjid->update(['saldo_akhir' => $saldoAkhir]);
+        // auth()->user()->masjid->update(['saldo_akhir' => $saldoAkhir]);
         return redirect()->route('kas.index')->with('success', 'Data kas Berhasil Di Update');
     }
 
@@ -158,12 +158,12 @@ class KasController extends Controller
 
 
         $saldoAkhir = Kas::saldoAkhir();
-        if ($kas->jenis == 'masuk') {
-            $saldoAkhir -= $kas->jumlah;
-        }
-        if ($kas->jenis == 'keluar') {
-            $saldoAkhir += $kas->jumlah;
-        }
+        // if ($kas->jenis == 'masuk') {
+        //     $saldoAkhir -= $kas->jumlah;
+        // }
+        // if ($kas->jenis == 'keluar') {
+        //     $saldoAkhir += $kas->jumlah;
+        // }
 
         if ($saldoAkhir <= -1) {
             Flash('Data Kas gagal dihapus. Saldo Akhir tidak boleh kurang dari 0 adalah <b> ' .  format_rupiah($saldoAkhir, true) . '</b>')->error();
@@ -171,7 +171,7 @@ class KasController extends Controller
         }
         // $kasBaru->saldo_akhir = $saldoAkhir;
         $kas->delete();
-        auth()->user()->masjid->update(['saldo_akhir' => $saldoAkhir]);
+        // auth()->user()->masjid->update(['saldo_akhir' => $saldoAkhir]);
         // $this->hitungSaldoAkhir(); // Panggil method hitungSaldoAkhir setelah menghapus data
         return redirect()->route('kas.index')->with('success', 'Data KAS Berhasil disimpan');
     }

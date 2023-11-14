@@ -46,4 +46,59 @@ class Kas extends Model
     // {
     //     return $q->where('masjid_id', auth()->user()->masjid_id);
     // }
+    protected static function booted(): void
+    {
+        static::created(function (Kas $kas) {
+            $saldoAwal = Kas::saldoAkhir();
+            $saldoAkhir = $saldoAwal;
+            // @dd($saldoAkhir);
+
+            if ($kas->jenis == 'masuk') {
+                $saldoAkhir += $kas->jumlah;
+            } else {
+                $saldoAkhir -= $kas->jumlah;
+            }
+            $kas->masjid->update(['saldo_akhir' => $saldoAkhir]);
+        });
+
+        static::deleted(function (Kas $kas) {
+            // @dd($saldoAkhir);
+
+
+            $saldoAkhir = Kas::saldoAkhir();
+            if ($kas->jenis == 'masuk') {
+                $saldoAkhir -= $kas->jumlah;
+            }
+            if ($kas->jenis == 'keluar') {
+                $saldoAkhir += $kas->jumlah;
+            }
+            $kas->masjid->update(['saldo_akhir' => $saldoAkhir]);
+        });
+
+        static::updated(function (Kas $kas) {
+            // @dd($saldoAkhir);
+
+            $saldoAkhir = Kas::saldoAkhir();
+
+            if (
+                $kas->jenis == 'masuk'
+            ) {
+                $saldoAkhir -= $kas->getOriginal('jumlah');
+                $saldoAkhir += $kas->jumlah;
+                // $saldoAwal = Kas::saldoAkhir() + $jumlah;
+                // @dd($jumlah);
+            }
+
+            if ($kas->jenis == 'keluar') {
+                $saldoAkhir += $kas->getOriginal('jumlah');
+                $saldoAkhir -= $kas->jumlah;
+                // $sisa =  $kas->jumlah - $kas->jumlah;
+                // $saldoAwal = $saldoAkhir + $jumlah; //sisa awal sebelum di keluarkan
+                // $saldoAkhir -= $sisa;
+                // @dd($saldoAwal);
+                // @dd($saldoAkhir);
+            }
+            auth()->user()->masjid->update(['saldo_akhir' => $saldoAkhir]);
+        });
+    }
 }
