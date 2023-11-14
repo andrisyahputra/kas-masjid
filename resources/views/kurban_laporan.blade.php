@@ -1,25 +1,13 @@
-@extends('layouts.app_adminkit') <!-- Sesuaikan dengan layout Anda -->
+@extends('layouts.app_adminkit_laporan') <!-- Sesuaikan dengan layout Anda -->
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-    <h1 class="h3 mb-3">{{ $title }}</h1>
-
-
-
+    <h2 class="text-center m-5">LAPORAN DATA KURBAN TAHUN {{ $model->tahun_hijriah . 'H/' . $model->tahun_masehi }}</h2>
     <div class="row">
         <div class="col">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <h3>Tahun Kurban {{ $model->tahun_hijriah . '/' . $model->tahun_masehi }}</h3>
-                        <a href="{{ route('kurban.show', [$model->id, 'output' => 'laporan']) }}" target="blank"><i
-                                class="align-middle" data-feather="file-text"></i>Laporan
-                            Peserta Kurban</a>
                     </div>
                     <h6>
                         <i class="align-middle" data-feather="calendar"></i>
@@ -36,31 +24,18 @@
                     <hr>
                     <h3>Data Hewan Kurban</h3>
 
-                    @if ($model->kurbanHewan->count() >= 1)
-                        <div class="text-center"><a class="btn btn-success mb-3"
-                                href="{{ route('kurbanhewan.create', [
-                                    'kurban_id' => $model->id,
-                                ]) }}">Buat
-                                Baru</a></div>
-                    @endif
-
 
                     @if ($model->kurbanHewan->count() == 0)
-                        <div class="text-center">Belum Ada Data Kurban <a
-                                href="{{ route('kurbanhewan.create', [
-                                    'kurban_id' => $model->id,
-                                ]) }}">Buat
-                                Baru</a></div>
+                        <div class="text-center">Belum Ada Data Kurban</div>
                     @else
                         <table class="{{ config('app.table_style') }}">
-                            <thead>
+                            <thead class="table-dark">
                                 <tr>
                                     <td width="1%">No</td>
                                     <td>HEWAN</td>
                                     <td>IURAN</td>
                                     <td>HARGA</td>
                                     <td>BIAYA OPS</td>
-                                    <td>AKSI</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -71,21 +46,7 @@
                                         <td>{{ format_rupiah($item->iuran_perorang, true) }}</td>
                                         <td>{{ $item->harga ? format_rupiah($item->harga, true) : '-' }}</td>
                                         <td>{{ format_rupiah($item->biaya_operasional, true) }}</td>
-                                        <td>
-                                            {!! Form::open([
-                                                'method' => 'DELETE',
-                                                'route' => ['kurbanhewan.destroy', [$item->id, 'kurban_id' => $item->kurban_id]],
-                                                'style' => 'display:inline',
-                                            ]) !!}
-                                            @csrf
 
-                                            <a href="{{ route('kurbanhewan.edit', [$item->id, 'kurban_id' => $item->kurban_id]) }}"
-                                                class="btn btn-primary btn-sm mb-1">Edit</a>
-
-                                            <button type="submit" class="btn btn-danger btn-sm"
-                                                onclick="return confirm('Apakah Anda yakin?')">Hapus</button>
-                                            {!! Form::close() !!}
-                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -94,23 +55,12 @@
                     <hr>
                     <h3>Data Peserta Hewan Kurban</h3>
                     {{-- modul peserta kurban --}}
-                    @if ($model->kurbanPeserta->count() >= 1)
-                        <div class="text-center"><a class="btn btn-success mb-3"
-                                href="{{ route('kurbanpeserta.create', [
-                                    'kurban_id' => $model->id,
-                                ]) }}">Pendaftaran
-                                Baru</a></div>
-                    @endif
 
                     @if ($model->kurbanPeserta->count() == 0)
-                        <div class="text-center">Belum Ada Peserta Kurban<a
-                                href="{{ route('kurbanpeserta.create', [
-                                    'kurban_id' => $model->id,
-                                ]) }}">Buat
-                                Baru</a></div>
+                        <div class="text-center">Belum Ada Peserta Kurban</div>
                     @else
                         <table class="{{ config('app.table_style') }}">
-                            <thead>
+                            <thead class="table-dark">
                                 <tr>
                                     <td width="1%">No</td>
                                     <td>NAMA</td>
@@ -118,7 +68,6 @@
                                     <td>ALAMAT</td>
                                     <td>JENIS HEWAN</td>
                                     <td>STATUS PEMBAYARAN</td>
-                                    <td>AKSI</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -141,33 +90,22 @@
                                                 <span class="badge bg-secondary">{{ $item->getStatusTeks() }}</span>
                                             @endif
                                         </td>
-
-                                        <td>
-                                            @if ($item->status_bayar != 'lunas')
-                                                {!! Form::open([
-                                                    'method' => 'DELETE',
-                                                    'route' => ['kurbanpeserta.destroy', [$item->id, 'kurban_id' => $item->kurban_id]],
-                                                    'style' => 'display:inline',
-                                                ]) !!}
-                                                @csrf
-
-                                                <a href="{{ route('kurbanpeserta.edit', [$item->id, 'kurban_id' => $item->kurban_id]) }}"
-                                                    class="btn btn-primary btn-sm mb-1">Pembayaran Kurban</a>
-
-                                                <button type="submit" class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Apakah Anda yakin?')">Hapus</button>
-                                                {!! Form::close() !!}
-                                            @else
-                                                Sudah Lunas
-                                            @endif
-                                            {{-- {{ dd($model->id) }} --}}
-
-                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="h4">Jumlah Peserta : {{ $model->kurbanPeserta->count() }}</div>
+                        <div class="h4">Jumlah Peserta Sudah Baya :
+                            {{ $model->kurbanPeserta->where('status_bayar', 'lunas')->count() }}</div>
 
+                        <div class="h4">Total Iuran Peserta Sudah bayar Kurban =
+                            {{ format_rupiah($model->kurbanPeserta->where('status_bayar', 'lunas')->sum('total_bayar'), true) }}
+                        </div>
+                        <div class="h4">Total Iuran Peserta Belum bayar Kurban =
+                            {{ format_rupiah($model->kurbanPeserta->where('status_bayar', '!=', 'lunas')->sum('total_bayar'), true) }}
+                        </div>
+                        <div class="h4">Total Iuran Seluruh Peserta Kurban =
+                            {{ format_rupiah($model->kurbanPeserta->sum('total_bayar'), true) }}</div>
                         {{-- modul peserta kurban --}}
                     @endif
                 </div>

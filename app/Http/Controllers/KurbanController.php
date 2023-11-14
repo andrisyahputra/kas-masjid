@@ -59,6 +59,9 @@ class KurbanController extends Controller
     {
         $data['model'] = $kurban;
         $data['title'] = 'Detail Informasi Kurban Masjid';
+        if (request('output') == 'laporan') {
+            return view('kurban_laporan', $data);
+        }
         return view('kurban_show', $data);
     }
 
@@ -67,6 +70,7 @@ class KurbanController extends Controller
      */
     public function edit(Kurban $kurban)
     {
+
         $data['model'] = $kurban;
         $data['title'] = 'Edit Data Kurban Masjid';
         $data['route'] = ['kurban.update', $kurban->id];
