@@ -29,6 +29,9 @@ class KasController extends Controller
         $saldoAkhir = Kas::saldoAkhir();
         $pemasukkan = $kasList->where('jenis', 'masuk')->sum('jumlah');
         $pengeluaran = $kasList->where('jenis', 'keluar')->sum('jumlah');
+        if (request('page') == 'laporan') {
+            return view('kas_laporan', compact('kasList', 'saldoAkhir', 'pemasukkan', 'pengeluaran'));
+        }
         return view('kas_index', compact('kasList', 'saldoAkhir', 'pemasukkan', 'pengeluaran'));
     }
 

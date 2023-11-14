@@ -1,5 +1,21 @@
 @extends('layouts.app_adminkit') <!-- Sesuaikan dengan layout Anda -->
+@section('js')
+    <script>
+        $(document).ready(function() {
+            $('#cetak').click(function(e) {
+                var tanggal_mulai = $('#tanggal_mulai').val();
+                var tanggal_selesai = $('#tanggal_selesai').val();
+                var q = $('#q').val();
+                // alert(tanggal_mulai + ' ' + tanggal_selesai + ' ' + q);
+                params = "?page=laporan&tanggal_mulai=" + tanggal_mulai + "&tanggal_selesai=" +
+                    tanggal_selesai + "&q=" +
+                    q;
 
+                window.open("/kas" + params, "_blank")
+            });
+        });
+    </script>
+@endsection
 @section('content')
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -20,28 +36,37 @@
                         'method' => 'GET',
                     ]) !!}
 
-                    <div class="d-flex mb-3">
+                    <div class="d-flex align-items-center mb-3">
                         <div class="me-auto p-2">
                             <a href="{{ route('kas.create') }}" class="btn btn-primary">Tambah
                                 Data</a>
                         </div>
                         <div class="p-2">
                             <label for="autoSizingInput">Tanggal Mulai Tranksaksi</label>
-                            {!! Form::date('tanggal_mulai', request('tanggal_mulai') ?? now(), ['class' => 'form-control']) !!}
+                            {!! Form::date('tanggal_mulai', request('tanggal_mulai') ?? now(), [
+                                'class' => 'form-control',
+                                'id' => 'tanggal_mulai',
+                            ]) !!}
                         </div>
                         <div class="p-2">
                             <label for="autoSizingInput">Tanggal Selesai Tranksaksi</label>
-                            {!! Form::date('tanggal_selesai', request('tanggal_selesai'), ['class' => 'form-control']) !!}
+                            {!! Form::date('tanggal_selesai', request('tanggal_selesai'), [
+                                'class' => 'form-control',
+                                'id' => 'tanggal_selesai',
+                            ]) !!}
                         </div>
                         <div class="p-2">
                             <label for="autoSizingSelect">Keterangan Tranksaksi</label>
                             {!! Form::text('q', request('q'), [
                                 'class' => 'form-control',
                                 'placeholder' => 'masukkan Tranksaksi',
+                                'id' => 'q',
                             ]) !!}
                         </div>
                         <div class="p-2">
                             <button type="submit" class="btn btn-primary">Submit</button>
+                            <button target="blank" type="button" class="btn btn-primary" id="cetak">Cetak
+                                Laporan</button>
                         </div>
                     </div>
                     {!! Form::close() !!}
@@ -51,7 +76,7 @@
                         <table class="{{ config('app.table_style') }}">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th width="1%">Nomor</th>
                                     <th>Diinput Oleh</th>
                                     <th>Tanggal</th>
                                     {{-- <th>Kategori</th> --}}
@@ -64,7 +89,7 @@
                             <tbody>
                                 @foreach ($kasList as $kas)
                                     <tr>
-                                        <td>{{ $kas->id }}</td>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>{{ $kas->createdBy->name }}</td>
                                         <td>{{ $kas->tanggal->translatedFormat('d-m-Y') }}</td>
                                         {{-- <td>{{ $kas->kategori ?? 'Umum' }}</td> --}}
@@ -96,7 +121,7 @@
                                 @endforeach
                             </tbody>
                             <tfoot>
-                                <td class="text-center fw-bold" colspan="5">Total</td>
+                                <td class="text-center fw-bold" colspan="4">Total</td>
                                 <td class="text-end">
                                     {{ format_rupiah($pemasukkan, true) }}</td>
                                 <td class="text-end">
