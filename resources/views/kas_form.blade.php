@@ -27,11 +27,11 @@
                             ) !!}
 
                         </div>
-                        <div class="mb-3 form-group">
+                        {{-- <div class="mb-3 form-group">
                             {!! Form::label('kategori', 'Kategori', ['class' => 'form-label']) !!}
                             {!! Form::text('kategori', null, ['class' => 'form-control', 'placeholder' => 'Masukkan Kategori']) !!}
                             <span class="text-danger">{{ $errors->first('kategori') }}</span>
-                        </div>
+                        </div> --}}
                         <div class="mb-3 form-group">
                             {!! Form::label('keterangan', 'Keterangan', ['class' => 'form-label']) !!}
                             {!! Form::textarea('keterangan', null, ['class' => 'form-control', 'placeholder' => 'Masukkan Keterangan']) !!}

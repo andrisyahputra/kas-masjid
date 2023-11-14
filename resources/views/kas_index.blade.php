@@ -18,26 +18,31 @@
                     {!! Form::open([
                         'url' => url()->current(),
                         'method' => 'GET',
-                        'class' => 'row row-cols-lg-auto align-items-center',
                     ]) !!}
-                    <div class="col-auto">
-                        <a href="{{ route('kas.create') }}" class="btn btn-primary">Tambah Data</a>
-                    </div>
-                    <div class="col-auto ms-auto">
-                        <label for="autoSizingInput">Tanggal Tranksaksi</label>
-                        {!! Form::date('tanggal', request('tanggal'), ['class' => 'form-control']) !!}
-                    </div>
 
-                    <div class="col-auto">
-                        <label for="autoSizingSelect">Keterangan Tranksaksi</label>
-                        {!! Form::text('q', request('q'), [
-                            'class' => 'form-control',
-                            'placeholder' => 'masukkan Tranksaksi',
-                        ]) !!}
-                    </div>
-
-                    <div class="col-auto">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                    <div class="d-flex mb-3">
+                        <div class="me-auto p-2">
+                            <a href="{{ route('kas.create') }}" class="btn btn-primary">Tambah
+                                Data</a>
+                        </div>
+                        <div class="p-2">
+                            <label for="autoSizingInput">Tanggal Mulai Tranksaksi</label>
+                            {!! Form::date('tanggal_mulai', request('tanggal_mulai') ?? now(), ['class' => 'form-control']) !!}
+                        </div>
+                        <div class="p-2">
+                            <label for="autoSizingInput">Tanggal Selesai Tranksaksi</label>
+                            {!! Form::date('tanggal_selesai', request('tanggal_selesai'), ['class' => 'form-control']) !!}
+                        </div>
+                        <div class="p-2">
+                            <label for="autoSizingSelect">Keterangan Tranksaksi</label>
+                            {!! Form::text('q', request('q'), [
+                                'class' => 'form-control',
+                                'placeholder' => 'masukkan Tranksaksi',
+                            ]) !!}
+                        </div>
+                        <div class="p-2">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
                     </div>
                     {!! Form::close() !!}
                 </div>
@@ -47,9 +52,9 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Tanggal</th>
                                     <th>Diinput Oleh</th>
-                                    <th>Kategori</th>
+                                    <th>Tanggal</th>
+                                    {{-- <th>Kategori</th> --}}
                                     <th>Keterangan</th>
                                     <th>Pemasukkan</th>
                                     <th>Pengeluaran</th>
@@ -60,9 +65,9 @@
                                 @foreach ($kasList as $kas)
                                     <tr>
                                         <td>{{ $kas->id }}</td>
-                                        <td>{{ $kas->tanggal->translatedFormat('d-m-Y') }}</td>
                                         <td>{{ $kas->createdBy->name }}</td>
-                                        <td>{{ $kas->kategori ?? 'Umum' }}</td>
+                                        <td>{{ $kas->tanggal->translatedFormat('d-m-Y') }}</td>
+                                        {{-- <td>{{ $kas->kategori ?? 'Umum' }}</td> --}}
                                         <td>{{ $kas->keterangan }}</td>
                                         <td class="text-end">
                                             {{ $kas->jenis == 'masuk' ? format_rupiah($kas->jumlah, true) : '-' }}

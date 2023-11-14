@@ -18,8 +18,11 @@ class KasController extends Controller
         if ($request->filled('q')) {
             $query = $query->where('keterangan', 'LIKE', '%' . $request->q . '%');
         }
-        if ($request->filled('tanggal')) {
-            $query = $query->where('tanggal', $request->tanggal);
+        if ($request->filled('tanggal_mulai')) {
+            $query = $query->whereDate('tanggal', '>=', $request->tanggal_mulai);
+        }
+        if ($request->filled('tanggal_selesai')) {
+            $query = $query->whereDate('tanggal', '<=', $request->tanggal_selesai);
         }
 
         $kasList = $query->latest()->paginate(50);
