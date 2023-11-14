@@ -18,7 +18,8 @@ class InfakController extends Controller
     {
         $query = Infak::userMasjid();
         if ($request->filled('q')) {
-            $query = $query->where('atas_nama', 'LIKE', '%' . $request->q . '%');
+            $query = $query->where('atas_nama', 'LIKE', '%' . $request->q . '%')
+                ->orWhere('sumber', 'LIKE', '%' . $request->q . '%');
         }
         if ($request->filled('tanggal_mulai')) {
             $query = $query->whereDate('created_at', '>=', $request->tanggal_mulai);
@@ -78,6 +79,7 @@ class InfakController extends Controller
         $infak = Infak::create($requestData);
         if ($infak->jenis == 'uang') {
             $kas = new Kas();
+            $kas->infak_id = $infak->id;
             $kas->masjid_id = $request->user()->masjid_id;
             $kas->tanggal = $infak->created_at;
             $kas->kategori = 'Infak- ' . $infak->sumber;
@@ -117,7 +119,16 @@ class InfakController extends Controller
      */
     public function update(UpdateInfakRequest $request, Infak $infak)
     {
-        //
+        $requestData = $request->validated();
+        DB::beginTransaction();
+        $infak->update($requestData);
+        $kas = $infak->kas;
+        // dd($kas);
+        $kas->jumlah = $infak->jumlah;
+        $kas->save();
+        DB::commit();
+        flash('Data Berhasil Diupdate Data infak dan Tersimpan di kas masjid');
+        return back();
     }
 
     /**
@@ -125,6 +136,12 @@ class InfakController extends Controller
      */
     public function destroy(Infak $infak)
     {
-        //
+        if ($infak->kas != null) {
+            $infak->kas->delete();
+        }
+        // dd($infak->kas);
+        $infak->delete();
+        flash('Infak Berhasil Dihapus');
+        return back();
     }
 }

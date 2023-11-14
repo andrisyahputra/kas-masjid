@@ -64,7 +64,7 @@
                             ]) !!}
                         </div>
                         <div class="p-2">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary">Cari</button>
                             <button target="blank" type="button" class="btn btn-primary" id="cetak">Cetak
                                 Laporan</button>
                         </div>
