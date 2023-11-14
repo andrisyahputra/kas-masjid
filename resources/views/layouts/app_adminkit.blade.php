@@ -54,6 +54,13 @@
                         </a>
                     </li>
 
+                    <li class="sidebar-item {{ Route::is('infak.*') ? 'active' : '' }}">
+                        <a class="sidebar-link" href="{{ route('infak.index') }}">
+                            <i class="align-middle" data-feather="user"></i> <span class="align-middle">Data
+                                Infak</span>
+                        </a>
+                    </li>
+
                     <li class="sidebar-item {{ Route::is('kas.*') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('kas.index') }}">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">Kas

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InfakController;
 use App\Http\Controllers\InformasiController;
 use App\Http\Controllers\KasController;
 use App\Http\Controllers\KategoriController;
@@ -42,6 +43,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('masjid', MasjidController::class);
 
     Route::middleware(EnsureDataMasjidCompleted::class)->group(function () {
+        Route::resource('infak', InfakController::class);
         Route::resource('kurbanpeserta', KurbanPesertaController::class);
         Route::resource('peserta', PesertaController::class);
         Route::resource('kurbanhewan', KurbanHewanController::class);
