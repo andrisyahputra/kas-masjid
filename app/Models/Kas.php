@@ -48,57 +48,69 @@ class Kas extends Model
     // }
     protected static function booted(): void
     {
-        static::created(function (Kas $kas) {
+        static::creating(function (Kas $kas) {
             $saldoAwal = Kas::saldoAkhir();
             $saldoAkhir = $saldoAwal;
-            // @dd($saldoAkhir);
+            // dd($saldoAkhir);
 
             if ($kas->jenis == 'masuk') {
                 $saldoAkhir += $kas->jumlah;
             } else {
                 $saldoAkhir -= $kas->jumlah;
             }
+
+            if ($saldoAkhir <= -1) {
+                Flash('Data Kas gagal DiKeluarkan <b>' . format_rupiah($kas->jumlah, true) . '</b>. Saldo Akhir tidak boleh kurang dari 0. saldo terakhir sisa <b>' . format_rupiah($saldoAwal, true) . '</b>')->error();
+                return false;
+            }
             $kas->masjid->update(['saldo_akhir' => $saldoAkhir]);
+            return true;
         });
 
-        static::deleted(function (Kas $kas) {
-            // @dd($saldoAkhir);
+        static::deleting(function (Kas $kas) {
 
-
-            $saldoAkhir = Kas::saldoAkhir();
+            $saldoAwal = Kas::saldoAkhir();
+            $saldoAkhir = $saldoAwal;
             if ($kas->jenis == 'masuk') {
                 $saldoAkhir -= $kas->jumlah;
             }
             if ($kas->jenis == 'keluar') {
                 $saldoAkhir += $kas->jumlah;
             }
+
+            if ($saldoAkhir <= -1) {
+                Flash('Data Kas ' . format_rupiah($kas->jumlah) . ' gagal dihapus. Saldo Akhir tidak boleh kurang dari 0 adalah <b> ' .  format_rupiah($saldoAwal, true) . '</b>')->error();
+                return false;
+            }
+
             $kas->masjid->update(['saldo_akhir' => $saldoAkhir]);
+            return true;
         });
 
-        static::updated(function (Kas $kas) {
+        static::updating(function (Kas $kas) {
             // @dd($saldoAkhir);
 
-            $saldoAkhir = Kas::saldoAkhir();
+            $saldoAwal = Kas::saldoAkhir();
+            $saldoAkhir = $saldoAwal;
 
             if (
                 $kas->jenis == 'masuk'
             ) {
                 $saldoAkhir -= $kas->getOriginal('jumlah');
                 $saldoAkhir += $kas->jumlah;
-                // $saldoAwal = Kas::saldoAkhir() + $jumlah;
-                // @dd($jumlah);
             }
 
             if ($kas->jenis == 'keluar') {
+
                 $saldoAkhir += $kas->getOriginal('jumlah');
                 $saldoAkhir -= $kas->jumlah;
-                // $sisa =  $kas->jumlah - $kas->jumlah;
-                // $saldoAwal = $saldoAkhir + $jumlah; //sisa awal sebelum di keluarkan
-                // $saldoAkhir -= $sisa;
-                // @dd($saldoAwal);
-                // @dd($saldoAkhir);
+                if ($saldoAkhir <= -1) {
+                    Flash('Data Kas gagal DiKeluarkan <b>' . format_rupiah($kas->jumlah, true) . '</b>. Saldo Akhir tidak boleh kurang dari 0. saldo terakhir sisa <b>' . format_rupiah($saldoAwal, true) . '</b>')->error();
+                    return false;
+                }
             }
             auth()->user()->masjid->update(['saldo_akhir' => $saldoAkhir]);
+            return true;
         });
     }
 }
