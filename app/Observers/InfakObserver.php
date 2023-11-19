@@ -17,7 +17,7 @@ class InfakObserver
             try {
                 $kas = new Kas();
                 $kas->infak_id = $infak->id;
-                // $kas->tanggal = $infak->created_at;
+                $kas->tanggal = $infak->created_at;
                 $kas->kategori = 'Infak- ' . $infak->sumber;
                 $kas->keterangan = 'Infak- ' . $infak->sumber . ' dari ' . $infak->atas_nama;
                 $kas->jenis = 'masuk';

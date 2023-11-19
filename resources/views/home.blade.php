@@ -1,4 +1,56 @@
 @extends('layouts.app_adminkit')
+@section('js')
+    <script>
+        var options = {
+            series: [{
+                name: "Total Infak",
+                data: @json($dataTotalBulan)
+            }],
+            chart: {
+                height: 280,
+                type: 'line',
+                zoom: {
+                    enabled: false
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'straight'
+            },
+            title: {
+                text: 'Data Total Infak Perbulan',
+                align: 'left'
+            },
+            grid: {
+                row: {
+                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                },
+            },
+            xaxis: {
+                categories: @json($dataBulan),
+            },
+            yaxis: {
+                labels: {
+                    formatter: function(value) {
+                        return value.toLocaleString("id-ID", {
+                            style: "currency",
+                            currency: "IDR"
+                        });
+                    }
+                }
+            },
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    </script>
+
+    {{-- <script src="{{ $chart->cdn() }}"></script> --}}
+    {{-- {{ $chart->script() }} --}}
+@endsection
 
 @section('content')
     <div class="container-fluid p-0">
@@ -74,15 +126,9 @@
 
             <div class="col-xl-6 col-xxl-7">
                 <div class="card flex-fill w-100">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            Grafik Infak Bulanan
-                        </h5>
-                    </div>
                     <div class="card-body py-3">
-                        <div class="chart chart-sm">
-                            <canvas id="chartjs-dashboard-line"></canvas>
-                        </div>
+                        {{-- {!! $chart->container() !!} --}}
+                        <div id="chart"></div>
                     </div>
                 </div>
             </div>

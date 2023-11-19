@@ -15,13 +15,13 @@
                             'method' => $method,
                         ]) !!}
 
-                        {{-- <div class="mb-3 form-group">
+                        <div class="mb-3 form-group">
                             {!! Form::label('created_at', 'Tanggal Infak', ['class' => 'form-label']) !!}
                             {!! Form::date('created_at', $model->created_at ?? now(), [
                                 'class' => 'form-control',
                             ]) !!}
                             <span class="text-danger">{{ $errors->first('created_at') }}</span>
-                        </div> --}}
+                        </div>
 
                         <div class="mb-3 form-group">
                             {!! Form::label('sumber', 'Sumber Infak', ['class' => 'form-label']) !!}

@@ -359,6 +359,9 @@
     <link href="{{ asset('select2/css/select2.min.css') }}" rel="stylesheet" />
     <script src="{{ asset('select2/js/select2.min.js') }}"></script>
 
+    <script src="{{ asset('achart/js/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('achart/css/apexcharts.min.css') }}"></script>
+
     <script>
         $(document).ready(function() {
             $('.select2').select2();
