@@ -40,56 +40,56 @@
                         Pages
                     </li>
 
-                    <li class="sidebar-item {{ Route::is('home') ? 'active' : '' }}">
+                    <li class="sidebar-item @activeMenu('home')">
                         <a class="sidebar-link" href="{{ route('home') }}">
                             <i class="align-middle" data-feather="sliders"></i> <span
                                 class="align-middle">Beranda</span>
                         </a>
                     </li>
 
-                    <li class="sidebar-item {{ Route::is('masjid.*') ? 'active' : '' }}">
+                    <li class="sidebar-item @activeMenu('masjid.*')">
                         <a class="sidebar-link" href="{{ route('masjid.create') }}">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">Data
                                 Masjid</span>
                         </a>
                     </li>
 
-                    <li class="sidebar-item {{ Route::is('infak.*') ? 'active' : '' }}">
+                    <li class="sidebar-item @activeMenu('infak.*')">
                         <a class="sidebar-link" href="{{ route('infak.index') }}">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">Data
                                 Infak</span>
                         </a>
                     </li>
 
-                    <li class="sidebar-item {{ Route::is('kas.*') ? 'active' : '' }}">
+                    <li class="sidebar-item @activeMenu('kas.*')">
                         <a class="sidebar-link" href="{{ route('kas.index') }}">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">Kas
                                 Masjid</span>
                         </a>
                     </li>
 
-                    <li class="sidebar-item {{ Route::is('profil.*') ? 'active' : '' }}">
+                    <li class="sidebar-item @activeMenu('profil.*')">
                         <a class="sidebar-link" href="{{ route('profil.index') }}">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profil
                                 Masjid</span>
                         </a>
                     </li>
 
-                    <li class="sidebar-item {{ Route::is('kategori.*') ? 'active' : '' }}">
+                    <li class="sidebar-item @activeMenu('kategori.*')">
                         <a class="sidebar-link" href="{{ route('kategori.index') }}">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">kategori
                                 Masjid</span>
                         </a>
                     </li>
 
-                    <li class="sidebar-item {{ Route::is('informasi.*') ? 'active' : '' }}">
+                    <li class="sidebar-item @activeMenu('informasi.*')">
                         <a class="sidebar-link" href="{{ route('informasi.index') }}">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">Informasi
                                 Masjid</span>
                         </a>
                     </li>
 
-                    <li class="sidebar-item {{ Route::is('masjidbank.*') ? 'active' : '' }}">
+                    <li class="sidebar-item @activeMenu('masjidbank.*')">
                         <a class="sidebar-link" href="{{ route('masjidbank.index') }}">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">Data Bank
                                 Masjid</span>
@@ -97,7 +97,7 @@
                     </li>
 
                     <li
-                        class="sidebar-item {{ Route::is('kurban.*') ? 'active' : '' }} {{ Route::is('kurbanhewan.*') ? 'active' : '' }}">
+                        class="sidebar-item @activeMenu('kurban.*') @activeMenu('kurbanhewan.*')">
                         <a class="sidebar-link" href="{{ route('kurban.index') }}">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">Data Kurban
                                 Masjid</span>

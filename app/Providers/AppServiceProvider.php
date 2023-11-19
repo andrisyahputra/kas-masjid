@@ -19,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        \Blade::directive('activeMenu', function ($route) {
+            return "{{ Route::is($route) ? 'active' : ''}}";
+        });
     }
 }
