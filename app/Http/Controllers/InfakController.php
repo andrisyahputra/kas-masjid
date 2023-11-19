@@ -66,29 +66,18 @@ class InfakController extends Controller
     public function store(StoreInfakRequest $request)
     {
         $requestData = $request->validated();
+        $requestData['atas_nama'] = $requestData['atas_nama'] ?? 'Hamba Allah';
         try {
             DB::beginTransaction();
-            $requestData['atas_nama'] = $requestData['atas_nama'] ?? 'Hamba Allah';
             $infak = Infak::create($requestData);
-            if ($infak->jenis == 'uang') {
-                $kas = new Kas();
-                $kas->infak_id = $infak->id;
-                $kas->masjid_id = $request->user()->masjid_id;
-                $kas->tanggal = $infak->created_at;
-                $kas->kategori = 'Infak- ' . $infak->sumber;
-                $kas->keterangan = 'Infak- ' . $infak->sumber . ' dari ' . $infak->atas_nama;
-                $kas->jenis = 'masuk';
-                $kas->jumlah = $infak->jumlah;
-                $kas->save();
-            }
             DB::commit();
-            flash('Data Berhasil Disimpan Data infak dan Tersimpan di kas masjid');
-            return back();
         } catch (\Throwable $th) {
             DB::rollback();
-            flash('Data Infak Gagal Disimpan ' . $th->getMessage())->error();
+            flash('Data Infak Gagal Disimpan, Error ' . $th->getMessage())->error();
             return back();
         }
+        flash('Data Berhasil Disimpan Data infak dan Tersimpan di kas masjid')->success();
+        return back();
     }
 
     /**
@@ -118,13 +107,16 @@ class InfakController extends Controller
     public function update(UpdateInfakRequest $request, Infak $infak)
     {
         $requestData = $request->validated();
-        DB::beginTransaction();
-        $infak->update($requestData);
-        $kas = $infak->kas;
-        // dd($kas);
-        $kas->jumlah = $infak->jumlah;
-        $kas->save();
-        DB::commit();
+        try {
+            DB::beginTransaction();
+            $infak->update($requestData);
+            DB::commit();
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollback();
+            flash('Data Gagal Diupdate Data infak dan Tidak Tersimpan di kas masjid')->error();
+            return back();
+        }
         flash('Data Berhasil Diupdate Data infak dan Tersimpan di kas masjid');
         return back();
     }
@@ -134,11 +126,15 @@ class InfakController extends Controller
      */
     public function destroy(Infak $infak)
     {
-        if ($infak->kas != null) {
-            $infak->kas->delete();
+        try {
+            //code...
+            DB::beginTransaction();
+            $infak->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            flash('Data Gagal Dihapus Data infak dan Tidak Tersimpan di kas masjid')->error();
+            return back();
         }
-        // dd($infak->kas);
-        $infak->delete();
         flash('Infak Berhasil Dihapus');
         return back();
     }
