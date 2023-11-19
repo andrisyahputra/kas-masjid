@@ -65,32 +65,30 @@ class InfakController extends Controller
      */
     public function store(StoreInfakRequest $request)
     {
-        // $table->foreignId('masjid_id');
-        //     $table->dateTime('tanggal');
-        //     $table->string('kategori')->nullable();
-        //     $table->text('keterangan');
-        //     $table->enum('jenis', ['masuk', 'keluar']);
-        //     $table->bigInteger('jumlah');
-        //     $table->bigInteger('saldo_akhir');
-        //     $table->foreignId('created_by')->index();
         $requestData = $request->validated();
-        DB::beginTransaction();
-        $requestData['atas_nama'] = $requestData['atas_nama'] ?? 'Hamba Allah';
-        $infak = Infak::create($requestData);
-        if ($infak->jenis == 'uang') {
-            $kas = new Kas();
-            $kas->infak_id = $infak->id;
-            $kas->masjid_id = $request->user()->masjid_id;
-            $kas->tanggal = $infak->created_at;
-            $kas->kategori = 'Infak- ' . $infak->sumber;
-            $kas->keterangan = 'Infak- ' . $infak->sumber . ' dari ' . $infak->atas_nama;
-            $kas->jenis = 'masuk';
-            $kas->jumlah = $infak->jumlah;
-            $kas->save();
+        try {
+            DB::beginTransaction();
+            $requestData['atas_nama'] = $requestData['atas_nama'] ?? 'Hamba Allah';
+            $infak = Infak::create($requestData);
+            if ($infak->jenis == 'uang') {
+                $kas = new Kas();
+                $kas->infak_id = $infak->id;
+                $kas->masjid_id = $request->user()->masjid_id;
+                $kas->tanggal = $infak->created_at;
+                $kas->kategori = 'Infak- ' . $infak->sumber;
+                $kas->keterangan = 'Infak- ' . $infak->sumber . ' dari ' . $infak->atas_nama;
+                $kas->jenis = 'masuk';
+                $kas->jumlah = $infak->jumlah;
+                $kas->save();
+            }
+            DB::commit();
+            flash('Data Berhasil Disimpan Data infak dan Tersimpan di kas masjid');
+            return back();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            flash('Data Infak Gagal Disimpan ' . $th->getMessage())->error();
+            return back();
         }
-        DB::commit();
-        flash('Data Berhasil Disimpan Data infak dan Tersimpan di kas masjid');
-        return back();
     }
 
     /**
