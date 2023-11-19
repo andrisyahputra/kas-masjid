@@ -21,6 +21,10 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
+    public function showLoginForm()
+    {
+        return view('auth.login_adminkit');
+    }
     /**
      * Where to redirect users after login.
      *
