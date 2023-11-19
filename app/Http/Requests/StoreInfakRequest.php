@@ -22,12 +22,7 @@ class StoreInfakRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
-            // {{-- table->string('sumber')->comment('sumber infak, infak, perorang, instansi, kotak-amal, kotak-jumat');
-            // $table->string('atas-nama');
-            // $table->string('jenis')->comment('barang, uang');
-            // $table->bigInteger('jumlah')->comment('jumlah barang atau uang');
-            // $table->string('satuan'); --}}
+            'created_at' => 'required|date',
             'sumber' => 'required',
             'atas_nama' => 'nullable',
             'jenis' => 'required',

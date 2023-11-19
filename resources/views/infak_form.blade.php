@@ -14,13 +14,14 @@
                             'route' => $route,
                             'method' => $method,
                         ]) !!}
-                        {{-- table->string('sumber')->comment('sumber infak, infak, perorang, instansi, kotak-amal, kotak-jumat');
-            $table->string('atas-nama');
-            $table->string('jenis')->comment('barang, uang');
-            $table->bigInteger('jumlah')->comment('jumlah barang atau uang');
-            $table->string('satuan'); --}}
 
-
+                        {{-- <div class="mb-3 form-group">
+                            {!! Form::label('created_at', 'Tanggal Infak', ['class' => 'form-label']) !!}
+                            {!! Form::date('created_at', $model->created_at ?? now(), [
+                                'class' => 'form-control',
+                            ]) !!}
+                            <span class="text-danger">{{ $errors->first('created_at') }}</span>
+                        </div> --}}
 
                         <div class="mb-3 form-group">
                             {!! Form::label('sumber', 'Sumber Infak', ['class' => 'form-label']) !!}
