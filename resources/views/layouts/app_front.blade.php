@@ -125,7 +125,7 @@
 
     <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">e-Masjid</a>
+            <a class="navbar-brand" href="/">e-Masjid</a>
             <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -136,12 +136,47 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{{ route('welcome') }}">Beranda</a>
                     </li>
+                    @isset($model)
+                        @if ($model->profils->count() > 0)
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
+                                    aria-expanded="false">Profil</a>
+                                <ul class="dropdown-menu">
+                                    @forelse ($model->profils as $itemProfil)
+                                        <li><a class="dropdown-item"
+                                                href="{{ route('data-masjid.profil', [$model->slug, $itemProfil->slug]) }}">{{ $itemProfil->judul }}</a>
+                                        </li>
+                                    @empty
+                                        <li><a class="dropdown-item" href="#">Tidak Ada Profil</a></li>
+                                    @endforelse
+                                </ul>
+                            </li>
+                        @endif
+
+
+                        @foreach ($model->kategoris as $itemKategori)
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
+                                    aria-expanded="false">{{ $itemKategori->nama }}</a>
+                                <ul class="dropdown-menu">
+                                    @forelse ($itemKategori->informasis as $itemInformasi)
+                                        <li><a class="dropdown-item"
+                                                href="{{ route('data-masjid.informasi', [$model->slug, $itemInformasi->slug]) }}">{{ $itemInformasi->judul }}</a>
+                                        </li>
+                                    @empty
+                                        <li><a class="dropdown-item" href="#">Data Tidak Ada</a></li>
+                                    @endforelse
+                                </ul>
+                            </li>
+                        @endforeach
+                    @endisset
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('register') }}">Pendaftaran</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">Login</a>
+                        <a class="nav-link" href="{{ route('login') }}">Login Pengurus</a>
                     </li>
+
 
                 </ul>
                 <form class="d-flex" role="search">
@@ -154,34 +189,9 @@
         </div>
     </nav>
 
-    <main class="container">
-        <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
-            <img class="me-3" src="{{ asset('images/logo.svg') }}" alt="" width="50" height="50" />
-            <div class="lh-1">
-                <h1 class="h6 mb-0 text-white lh-1">e-Masjid</h1>
-                <small>Aplikasi Pengolaan Keuangan Masjid</small>
-            </div>
-        </div>
-
-        <div class="my-3 p-3 bg-body rounded shadow-sm">
-            <h6 class="border-bottom pb-2 mb-0">Masjid Ter-Daftar</h6>
-            @foreach ($masjid as $item)
-                <div class="d-flex text-body-secondary pt-3">
-                    <img class="me-3" src="{{ asset('images/masjid1.svg') }}" alt="" width="50"
-                        height="50" />
-                    <p class="pb-3 mb-0 small lh-sm border-bottom">
-                        <strong class="d-block text-gray-dark">{{ ucwords($item->nama) }}</strong>
-                        {{ $item->alamat }}
-                    </p>
-                </div>
-            @endforeach
+    @yield('content')
 
 
-            <small class="d-block text-end mt-3">
-                <a href="{{ route('login') }}">Login Sebagai Pengurus</a>
-            </small>
-        </div>
-    </main>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 
     <script src="{{ asset('offcanvas-navbar/offcanvas-navbar.js') }}"></script>

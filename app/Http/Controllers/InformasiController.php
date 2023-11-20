@@ -30,7 +30,7 @@ class InformasiController extends Controller
         $data['title'] = 'Tambah Informasi Baru Masjid';
         $data['route'] = 'informasi.store';
         $data['method'] = 'POST';
-        $data['kategoris'] = Kategori::pluck('nama', 'id');
+        $data['kategoris'] = Kategori::UserMasjid()->pluck('nama', 'id');
         return view('informasi_form', $data);
     }
 
@@ -40,7 +40,7 @@ class InformasiController extends Controller
     public function store(Request $request)
     {
         $requestData = $request->validate([
-            'kategori' => 'required',
+            'kategori_id' => 'required',
             'judul' => 'required',
             'konten' => 'nullable',
         ]);
@@ -81,7 +81,7 @@ class InformasiController extends Controller
     public function update(Request $request, Informasi $informasi)
     {
         $requestData = $request->validate([
-            'kategori' => 'required',
+            'kategori_id' => 'required',
             'judul' => 'required',
             'konten' => 'nullable',
         ]);

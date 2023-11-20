@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('masjids', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
+            $table->string('slug');
             $table->text('alamat');
             $table->string('telp');
             $table->string('email');
