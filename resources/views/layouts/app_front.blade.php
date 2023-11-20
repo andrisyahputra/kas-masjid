@@ -188,7 +188,9 @@
             </div>
         </div>
     </nav>
-
+    {{-- <div class="p-4"> --}}
+    @include('flash::message')
+    {{-- </div> --}}
     @yield('content')
 
 

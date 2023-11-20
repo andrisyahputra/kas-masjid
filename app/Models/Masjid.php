@@ -53,4 +53,14 @@ class Masjid extends Model
     {
         return $this->hasMany(Informasi::class);
     }
+
+    /**
+     * Get all of the kas for the Masjid
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function kas(): HasMany
+    {
+        return $this->hasMany(Kas::class);
+    }
 }
